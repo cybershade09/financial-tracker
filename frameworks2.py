@@ -5,10 +5,10 @@ class User:
         self.password = password
 
 class Account:
-    def __init__(self,AccountID,Email,AccountName,Amount):
-        self.AccountID = AccountID
+    def __init__(self,Email,AccountName,NameOnCard,Amount):
         self.Email = Email
         self.AccountName = AccountName
+        self.NameOnCard = NameOnCard
         self.Amount = Amount
 
 class SpendingAccount:

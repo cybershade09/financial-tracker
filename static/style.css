@@ -205,10 +205,6 @@ header{
 
 body{
     font-family: Arial, sans-serif;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-
 }
 
 .transaction_container{
@@ -229,5 +225,6 @@ body{
     display: flex;
     flex-direction: column;
 }
+
 
 

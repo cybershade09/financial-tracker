@@ -1,20 +1,28 @@
 from flask import Flask,render_template,session, request, flash,url_for,redirect
 import sqlite3
 from passlib.hash import pbkdf2_sha256
-from frameworks import User,Account
+from frameworks import User,Account,SpendingAccount
 from tools import get_user_info,sql_read,sql_write
 import os
+import functools
 
 app = Flask(__name__)
 app.secret_key = os.urandom(24)
 
+def login_required(route):
+    @functools.wraps(route)
+    def route_wrapper(*args,**kwargs):
+        if session.get("email") is None:
+            return redirect(url_for("home"))
+        return route(*args,**kwargs)
+    return route_wrapper
 
 @app.route('/')
 def home():
     if session.get("email"):
         user = User(*get_user_info(session.get("email")))
         accounts = sql_read(("SELECT * from Account WHERE Account.Email = ?",(user.email,)))
-        accounts = list(map(lambda parameters: Account(*paramenters),accounts))
+        accounts = list(map(lambda parameters: Account(*parameters),accounts))
         return render_template("cash.html",accounts = accounts)
     else:
         return render_template('login.html')
@@ -52,11 +60,37 @@ def process_register():
         flash("Account Successfully created",category = "success")
         return redirect(url_for("home"))
 
-@app.route('/transaction')
-def transactions():
-    return render_template('add_transaction.html')
+@app.route('/add_account')
+@login_required
+def add_account():
+    SpendingAccounts = [SpendingAccount(*AccountData) for AccountData in sql_read(("SELECT * FROM SpendingAccount WHERE SpendingAccount.Approval  = 1;",))]
+    return render_template("add_account.html",SpendingAccounts = SpendingAccounts)
 
-@app.errorhandler(404)
-def notfound(e):
-    return render_template('404.html'),404
+@app.route("/process_account",methods = ["POST"])
+@login_required
+def process_account():
+    data = request.form
+    accounts = sql_read(("SELECT * from Account WHERE Account.Email = ?",(user.email,)))
+    accounts = list(map(lambda parameters: Account(*parameters),accounts))
+    if any([account.AccountName == data["account"] and account.Amount == float(data["amount"]) for account in accounts]):
+        flash("Account already exists",category = "danger")
+        return redirect(url_for('home'))
+    sql_write(("INSERT INTO Account(Email,AccountName,Amount) VALUES (?,?,?,?);",(session.get("email"),data["account"],float(data["amount"]))))
+    flash("Spending option Added",category="success")
+    return redirect(url_for('home'))
+
+@app.route("/process_SpendingAccount" , methods = ["POST"])
+@login_required
+def process_SpendingAccount():
+    #INSERT INTO SpendingAccount (AccountName, Approval, RequestEmail) VALUES ('OCBCS', 0, 'test');
+    account_name = request.form["account_name"]
+    SpendingAccounts = [SpendingAccount(*AccountData) for AccountData in sql_read(("SELECT * FROM SpendingAccount WHERE SpendingAccount.Approval  = 1;",))]
+    if any([account.AccountName == account_name for account in SpendingAccounts]):
+        flash("Spending Option already exists",category="danger")
+        
+    sql_write()
+    
+@app.route('/transaction')
+def add_transaction():
+    return render_template("add_transaction.html")
 app.run(port = 5000)

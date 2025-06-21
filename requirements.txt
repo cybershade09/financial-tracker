@@ -1,2 +1,4 @@
 flask
 passlib
+cryptography
+python-dotenv

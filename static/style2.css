@@ -1,5 +1,96 @@
-.form_3{
+/* add transactions page*/
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: white;
+  height: 100vh; /* Full page height */
+}
+
+/* Form container */
+.transaction_form {
+  background-color: white;
+  padding: 30px;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+  width: 350px;
+  display: flex;
+  flex-direction: column;
+  
+}
+ 
+.transaction_form_container{
     display: flex;
     justify-content: center;
-    allign-items: center;
+    width: 100vw;
+}
+
+/* Heading style */
+h2 {
+  text-align: left;
+  margin-bottom: 20px;
+  border-bottom: 1px solid #ccc;
+  padding-bottom: 10px;
+  width: 350px;
+  font-size: 30px;
+}
+
+/* Labels and inputs */
+label {
+    margin-top: 10px;
+    margin-bottom: 5px;
+    font-family: 'Archivo', 'sans-serif';
+}
+  
+
+input, select, textarea {
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 14px;
+  background-color: Gainsboro;
+}
+
+textarea {
+  height: 80px;
+  resize: none;
+}
+
+/* Button styling */
+button {
+  margin-top: 20px;
+  padding: 10px;
+  background-color: #00FA9A;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 15px;
+}
+
+button:hover {
+  background-color: #009999;
+}
+
+/* add accounts page*/
+
+.accounts_form,
+.other_accounts{
+    background-color: white;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    width: 350px;
+    display: flex;
+    flex-direction: column;
+  
+}
+
+.card_dropdown{
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 20px;
+    border: 1px solid;
+    border-radius: 4px;
+    font-size: 1em;
 }
