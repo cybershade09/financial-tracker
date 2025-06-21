@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>FinanceLens</title>
+    <link rel="stylesheet" href="../static/style.css">
 </head>
 <body>
     <header>
@@ -13,20 +14,22 @@
             <p class = "logo_title">FinanceLens</p>
         </div>
     </header>
-    <div class = "form">
-        <form class="register" action="" methods="POST">
-            <h3 class="register">REGISTER</h3>
-            <p class="email_tag">Email</p>
-            <input type="text" name="email" class="email_input">
-            <p class="name_tag">Name</p>
-            <input type="text" name="name" class="name_input">
-            <p class="password_tag">Password</p>
-            <input type="text" name="password" class="password_input">
-            <p class="cfm_password_tag">Confirm Password</p>
-            <input type="text" name="cfm_password" class="cfm_password_input">
-            <p class="login_link">Already have an account? Login <a href="">here</a></p>
-            <input type="submit" value="Confirm" class="submit_register">
-        </form>
-    </div>
+    <main class ="register_main">
+        <div class = "form_2">
+            <form class="register" action="{{url_for('.process_register')}}" method="POST">
+                <h3 class="register_tag">REGISTER</h3>
+                <p class="email_tags">Email</p>
+                <input type="text" name="email" class="email_inputs">
+                <p class="name_tag">Name</p>
+                <input type="text" name="name" class="name_inputs">
+                <p class="password_tags">Password</p>
+                <input type="password" name="password" class="password_inputs">
+                <p class="cfm_password_tag">Confirm Password</p>
+                <input type="password" name="cfm_password" class="cfm_password_inputs">
+                <p class="login_link">Already have an account? Login <a href="{{url_for('home')}}">here</a></p>
+                <input type="submit" value="Confirm" class="submit_register submit_login">
+            </form>
+        </div>
+    </main>
 </body>
 </html>    

@@ -1,13 +1,38 @@
-{%entends template.html%}
-{%block head%}
+{%extends "template.html"%}
 
+{%block head%}
 {%endblock%}
 
 {%block main%}
-    <h2 class="add_transaction">Add Transaction</h2>
-    <hr>
-    <div class="tranasction_details">
-        
+    <div class="transaction_container">
+        <h2 class="add_transaction">Add Transaction</h2>
+        <hr class="divider">
+        <form class="transaction_form" action="" methods="POST">
+            <div class="transaction_details">
+                <label for="types">Select trasanction type:</label>
+                <select class = "transaction_types" name="type" id="types">
+                    <option class = "type_option" value="expense">Expense</option>
+                    <option class = "type_option" value="income">Income</option>
+                </select>
+            
+            
+                <Amount: class="amount_tag">
+                <input type="number" name="amount" class="amount_input">
+            
+                <Category: class="category_tag">
+                <input type="text" name="category" class="category_input">
+                <br><br>
 
+                <Date: class="date_tag"> 
+                <input type="date" name="date" class="date_input">
+                <br><br>
+
+                <Description: class="description_tag">
+                <input type="text" name="description" class="description_input"><br><br>
+                    
+                <button type="submit">Add Transaction</button>
+                </div>
+            </div>
+        </form>   
     </div>
 {%endblock%}

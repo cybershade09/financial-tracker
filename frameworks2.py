@@ -10,9 +10,10 @@ class Account:
         self.Email = Email
         self.AccountName = AccountName
         self.Amount = Amount
-'''  
+
 class SpendingAccount:
-    def __init__(self, AccountName,approval,requestEmail):
+    def __init__(self, AccountName,Approval,RequestEmail):
         self.AccountName = AccountName
-        self.
-        '''
+        self.Approval = Approval
+        self.RequestEmail = RequestEmail
+ 

@@ -1,0 +1,25 @@
+html{
+    --accent-green:#07a091;
+}
+.category_container{
+    font-size: 16px;
+    color: white;
+    background: #0cc1af;
+}
+
+.logout_html{
+    font-size: 16px;
+    color: black;
+    background: #e5e175;
+    border-radius: 5px;
+}
+
+.category_highlighted{
+    color: red;
+    background: #07a091;
+}
+
+
+
+
+

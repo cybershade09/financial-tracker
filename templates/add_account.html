@@ -1,26 +1,24 @@
-{%entends template.html%}
+{%extends "template.html"%}
 {%block head%}
 
 {%endblock%}
 
 {%block main%}
     <div class="accounts_form"> 
-        <form class="accounts" action="" methods="POST">
+        <form class="accounts" action="{{url_for('process_account')}}" method="POST">
             <label for="accounts">Select an account</label>
-            <select class = "card_dropdown" name="accounts" id="accounts">
-                <option class = "card_option" value="OCBC">OCBC</option>
-                <option class = "card_option" value="DBS">DBS</option>
-                <option class = "card_option" value="POSB">POSB</option>
-                <option class = "card_option" value="Revolut">Revolut</option>
-                <option class = "card_option" value="Standard Chartered">Standard Chartered</option>
-                <option class = "card_option" value="Cash">Cash</option>
+            <select class = "card_dropdown" name="account" id="accounts" required>
+                {%for account in SpendingAccounts%}
+                    <option class = "card_option" value="{{account.AccountName}}">{{account.AccountName}}</option>
+                {%endfor%}
             </select>
-            <p class="">Value: <input type="text" name="amount"></p>
+            <p class  ="">Name on Card: <input type="text" name="name_on_card" required></p>
+            <p class="">Value: <input type="number" steps="any" name="amount" required></p>
             <input class="submit_value" type="submit" value="SUBMIT">
         </form> 
     </div>
     <div class="other_accounts_form">
-        <form class="other_accounts" action="" methods="POST">
+        <form class="other_accounts" action="{{url_for('process_SpendingAccount')}}" method="POST">
             <p class="others">Others<p>
             <p class="other_accounts_name">Account Name: <input type="text" name="account_name"></p>
             <input class="submit_request" type="submit" value="SEND REQUEST">

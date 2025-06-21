@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>FinanceLens</title>
+    <link rel="stylesheet" href="../static/style.css">
 </head>
 <body>
     <header>
@@ -11,31 +12,47 @@
             <img class="small_logo" src="../static/logo.svg">
             <p class = "logo_title">FinanceLens</p>
         </div>
-        <div>
-            <a class="signup" href="">Sign Up</a>
+        <div class = "signup_container">
+            <a class="signup" href="{{url_for('register')}}">Sign Up</a>
         </div>
     </header>
     <main>
-        <div class="info">
-            <img class="logo" src="../static/logo.svg">
-            <h1 class="title"><b>FinanceLens</b></h1>
-            <h2 class="motto">See Clearly, Spend Smarter</h2>
-            <p class="passage">
-                Take control of your finances with our all-in-one tracker. Monitor your bank accounts, cash, investments, and foreign currency prices in one easy-to-use app. Instantly see your net worth and gain the clarity you need to master your financial future. Start today!
-            </p>
-        </div>
-        <div class ="form">
-            <form class="login_details" action="" methods="POST">
-                <h3 class="login">LOGIN</h3>
-                <p class="email_tag">Email</p>
-                <input class="email_input" type="text" name="email">
-                <p class="password_tag">Password</p>
-                <input class="password_input" type="text" name="password">
-                <p class="register_link">Don't have an account? Register <a href="">here</a></p>
-                <br>
-                <input class="submit_login" type="submit" value="Login">
-            </form>
-        </div>
+        <table>
+            <tr>
+                <td style="width:50vw;display:flex;justify-content:center;">
+                    <div class="info">
+                        <div class = "logo_container">
+                            <img class="logo" src="../static/logo.svg">
+                        </div>
+                        <div class = "title_container">
+                            <h1 class="title"><b>FinanceLens</b></h1>
+                        </div>
+                        <div class = "motto_container">
+                            <h2 class="motto">See Clearly, Spend Smarter</h2>
+                        </div>
+                        <div class="passage_container">
+                            <p class="passage">
+                                Take control of your finances with our all-in-one tracker. Monitor your bank accounts, cash, investments, and foreign currency prices in one easy-to-use app. Instantly see your net worth and gain the clarity you need to master your financial future. Start today!
+                            </p>
+                        </div>
+                    </div>
+                </td>
+                <td style="width:50vw;">
+                    <div class ="form">
+                        <form class="login_details" action="{{url_for('process_login')}}" method="POST">
+                            <h3 class="login">LOGIN</h3>
+                            <p class="email_tag">Email</p>
+                            <input class="email_input" type="text" name="email">
+                            <p class="password_tag">Password</p>
+                            <input class="password_input" type="password" name="password">
+                            <p class="register_link">Don't have an account? Register <a id="link" href="{{url_for('register')}}">here</a></p>
+                            <br>
+                            <input class="submit_login" type="submit" value="Login">
+                        </form>
+                    </div>
+                </td>
+            </tr>
+        </table>
     </main>
 </body>
 </html>

@@ -1,0 +1,17 @@
+{% macro cash_option(name, amount) %}
+<div style="
+    width: 300px;
+    height:150px;
+    padding: 20px;
+    border-radius: 15px;
+    background-color: #0cc1af;
+    margin: 10px auto;
+">
+    <div style="font-size: 18px; margin-bottom: 10px;">
+        {{ name }}
+    </div>
+    <div style="font-size: 24px; font-weight: bold;">
+        ${{ "%.2f"|format(amount) }}
+    </div>
+</div>
+{% endmacro %}

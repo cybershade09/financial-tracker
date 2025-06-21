@@ -1,0 +1,233 @@
+@import url('https://fonts.googleapis.com/css2?family=Archivo:wght@400;700&display=swap');
+
+html{
+    --form-green:#99e5dd;
+    --header-green: #0cc1af;
+    --button-yellow: #e5e175;
+    --font-family: 'Archivo', 'sans-serif';
+    padding:0px;
+    margin:0px;
+}
+
+body{
+    margin:0px;
+    padding:0px;
+}
+.full_logo{
+    display:flex;
+}
+header{
+    background-color: var(--header-green);
+    display:flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.logo_title{
+    font-family: var(--font-family);
+}
+.small_logo{
+    width:40px;
+}
+
+.signup_container{
+    border-radius: 10px;
+    background-color: var(--button-yellow);
+    margin:0px 10px ;
+    width:80px;
+    display:flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.signup{
+    text-decoration:none;
+    color:black;
+}
+.info{
+    align-items: center;
+    font-family: var(--font-family);
+}
+
+.logo{
+
+}
+
+.motto_container{
+      width:100%;
+      display: flex;
+      justify-content: center;
+
+}
+
+.title_container{
+    display:flex;
+    justify-content:center;
+    
+}
+.title{
+    justify-content: center;
+    font-family: var(--font-family);
+}
+
+.logo_container{
+    display:flex;
+    justify-content:center;
+}
+
+.passage_container{
+    display:flex;
+    justify-content: center;
+}
+.passage{
+    font-size: 30px;
+    width: 500px;
+    height: 200px;
+    text-align:center;
+    font-family: var(--font-family);
+}
+
+.form{ 
+    background-color: var(--form-green);
+    border-radius:50px;
+    height: 500px;
+    width: 400px;
+    padding-top: 30px;
+    padding-bottom: 90px;
+    padding-left: 70px;
+    padding-right: 70px;
+    height: auto;
+}
+
+.login{
+    color: black;
+    font-family: var(--font-family);
+    font-size: 50px;
+    font-weight: bold;
+    text-align: center;
+}
+
+.email_tag{
+    color: black;
+    font-family: var(--font-family);
+    font-size: 20px;
+    font-weight: normal;
+}
+
+.email_input{
+    background: white;
+    border: 1px solid;
+    border-radius: 8px;
+    height: 70px;
+    width: 390px;
+}
+
+.password_tag{
+    color: black;
+    font-family: var(--font-family);
+    font-size: 20px;
+    font-weight: normal;
+}
+
+.password_input{
+    background: white;
+    border: 1px solid;
+    border-radius: 8px;
+    height: 70px;
+    width: 390px;
+}
+
+.register_link{ 
+    color: black;
+    font-family: var(--font-family);
+    font-size: 14px;
+    font-weight: normal
+}
+
+#link{
+    color: black;
+    font-family: var(--font-family);
+    font-size: 14px;
+    font-weight: normal;
+    text-decoration: underline;
+}
+
+.submit_login{
+    background: var(--button-yellow);
+    color: black;
+    font-family: var(--font-family);
+    font-size: 40px;
+    border: 1px solid;
+    border-radius: 8px;
+}
+
+.form_2{
+    background-color: var(--form-green);
+    border-radius:50px;
+    height: 500px;
+    width: 400px;
+    padding-top: 30px;
+    padding-bottom: 90px;
+    padding-left: 70px;
+    padding-right: 70px;
+    height: auto;
+    display:flex;
+    justify-content:center;
+}
+
+.register_tag{
+    color: black;
+    font-family: var(--font-family);
+    font-size: 50px;
+    font-weight: bold;
+    text-align: center;
+}
+
+.cfm_password_tag,
+.name_tag,
+.email_tags,
+.password_tags{
+    color: black;
+    font-family: var(--font-family);
+    font-size: 20px;
+    font-weight: normal;
+}
+
+.cfm_password_inputs,
+.name_inputs,
+.email_inputs,
+.password_inputs{
+    background: white;
+    border: 1px solid;
+    border-radius: 8px;
+    height: 60px;
+    width: 390px;
+}
+
+body{
+    font-family: Arial, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+}
+
+.transaction_container{
+    width: 100%;
+    max-width: 400px;
+    margin: auto;
+    padding: 20px;
+}
+
+.transaction_form{
+    padding: 25px;
+    border-radius: 8px;
+    max-width: 500px;
+    margin: 0 auto;
+}
+
+.transaction_details{
+    display: flex;
+    flex-direction: column;
+}
+
+

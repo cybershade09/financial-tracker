@@ -1,0 +1,33 @@
+.custom-bg{
+    background-color: #0cc1af;
+}
+
+.error{
+    display: block;
+    justify-content: center;
+}
+
+.header{
+    color: white;
+    font-size: 150px;
+    text-align: center;
+}
+
+.logo{
+    height: 180px;
+    width: 180px;
+}
+
+.page_not_found{
+    color: white;
+    font-size: 100px;
+    font-weight: bold;
+    text-align: center;
+}
+
+.click_logo{
+    color: white;
+    font-size: 20px;
+    font-weight: bold;
+    text-align: center;
+}
