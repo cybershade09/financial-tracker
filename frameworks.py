@@ -5,12 +5,18 @@ class User:
         self.password = password
 
 class Account:
-    def __init__(self,AccountID,Email,AccountName,Amount):
-        self.AccountID = AccountID
+    def __init__(self,Email,AccountName,NameOnCard,Amount):
         self.Email = Email
         self.AccountName = AccountName
+        self.NameOnCard = NameOnCard
         self.Amount = Amount
+    
+    def to_dict(self):
+        return {"Email":self.Email,"AccountName":self.AccountName,"NameOnCard":self.NameOnCard,"Amount":self.Amount}
 
+    @staticmethod
+    def from_dict(data):
+        return Account(data["Email"],data["AccountName"],data["NameOnCard"],data["Amount"])
 class SpendingAccount:
     def __init__(self, AccountName,Approval,RequestEmail):
         self.AccountName = AccountName

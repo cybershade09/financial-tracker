@@ -12,8 +12,8 @@
     <div class="cards">
         {%if accounts%}
             {%for account in accounts%}
-                <a href="history.html" class="card">
-                    {{cash_option(account.NameOnCard,account.Amount,account.AccountName)}}
+                <a href="/history/{{account[1]}}" class="card">
+                    {{cash_option(account[0].NameOnCard,account[0].Amount,account[0].AccountName)}}
                 </a>
             {%endfor%}
         {%else%}

@@ -6,7 +6,7 @@
 {%block main%}
     <div class="accounts_form"> 
         <form class="accounts" action="{{url_for('process_account')}}" method="POST">
-            <label for="accounts">Select an account</label>
+            <label for="select_accounts">Select an account</label>
             <select class = "card_dropdown" name="account" id="accounts" required>
                 {%for account in SpendingAccounts%}
                     <option class = "card_option" value="{{account.AccountName}}">{{account.AccountName}}</option>
@@ -19,9 +19,11 @@
     </div>
     <div class="other_accounts_form">
         <form class="other_accounts" action="{{url_for('process_SpendingAccount')}}" method="POST">
-            <p class="others">Others<p>
-            <p class="other_accounts_name">Account Name: <input type="text" name="account_name"></p>
+            <label for="others">Others</label>
+            <label for="other_accounts_name">Account Name: </label>
+            <input type="text" name="account_name">
             <input class="submit_request" type="submit" value="SEND REQUEST">
         </form>
     </div>
 {%endblock%}
+

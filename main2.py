@@ -1,11 +1,14 @@
-from flask import Flask,render_template,session, request, flash,url_for,redirect
+from flask import Flask,render_template,session, request, flash,url_for,redirect,abort
 import sqlite3
 from passlib.hash import pbkdf2_sha256
 from frameworks2 import User,Account,SpendingAccount
 from tools import get_user_info,sql_read,sql_write
 import os
 import functools
-import dotenv
+from dotenv import load_dotenv
+from cryptography.fernet import Fernet
+import json
+
 
 app = Flask(__name__)
 app.secret_key = os.urandom(24)
@@ -22,12 +25,13 @@ def login_required(route):
 @app.route('/')
 def home():
     if session.get("email"):
-        fernet = Fernet(os.getenv("FERENET_KEY").encode())
+        cipher = Fernet(os.getenv("FERENET_KEY").encode())
         user = User(*get_user_info(session.get("email")))
         accounts = sql_read(("SELECT * from Account WHERE Account.Email = ?",(user.email,)))
         accounts = list(map(lambda parameters: Account(*parameters),accounts))
-        accounts = [(account,)]
+        
         total_balance = sum(account.Amount for account in accounts)
+        accounts = [(account,cipher.encrypt(json.dumps(account.to_dict()).encode()).decode()) for account in accounts]
         return render_template("cash.html",accounts = accounts,total_balance=total_balance)
     else:
         return render_template('login.html')
@@ -85,6 +89,7 @@ def process_account():
         flash("Account already exists",category = "danger")
         return redirect(url_for('home'))
     sql_write(("INSERT INTO Account(Email,AccountName,NameOnCard,Amount) VALUES (?,?,?,?);",(session.get("email"),data["account"],data["name_on_card"],float(data["amount"]))))
+    sql_write(("INSERT INTO AccountIDMap(Email,AccountName,NameOnCard) VALUES (?,?,?);",(session.get("email"),data["account"],data["name_on_card"])))
     flash("Spending option Added",category="success")
     return redirect(url_for('home'))
 
@@ -103,7 +108,30 @@ def process_SpendingAccount():
 
 
 
-@app.route("/history")
+@app.route("/history/<AccountDetails>")
+@login_required
+def history(AccountDetails):
+    cipher = Fernet(os.getenv("FERENET_KEY").encode())
+    account = Account.from_dict(json.loads(cipher.decrypt(AccountDetails.encode()).decode()))
+    if account.Email != session.get("email"):
+        return abort(403)
+    sql = """SELECT AccountIDMap.AccountID FROM AccountIDMap WHERE
+    AccountIDMap.Email = ? AND 
+    AccountIDMap.AccountName = ? AND 
+    AccountIDMap.NameOnCard = ?;"""
+    AccountID = sql_read((sql,(account.Email,account.AccountName,account.NameOnCard)),0)[1]
+    
+    
+@app.route("/add_transaction/<AccountDetails>")
+@login_required
+def add_transaction(AccountDetails):
+    cipher = Fernet(os.getenv("FERENET_KEY").encode())
+    account = Account.from_dict(json.loads(cipher.decrypt(AccountDetails.encode()).decode()))
+    if account.Email != session.get("email"):
+        return abort(403)
+    
+    
+    
 
 
 app.run(port = 5001)

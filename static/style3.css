@@ -1,0 +1,42 @@
+.balance{
+    color: black;
+    font-size: 50px;
+    font-family: 'Archivo', 'sans-serif'
+}
+
+.amount{
+    color: black;
+    font-size: 100px;
+    font-family: 'Archivo', 'sans-serif'
+}
+
+.cardbox{
+    width: 200px;
+    height: 40px;
+    background-color: #e1fdfe;
+    border-radius: 10px;
+}
+
+.card{
+    color: black;
+    font-size: 90px;
+    font-family: 'Archivo', 'sans-serif';
+    text-align: center;
+}
+
+.thtag{
+    color: black;
+    font-size: 100px;
+    font-family: 'Archivo', 'sans-serif'
+}
+
+.filter{
+    background-color: ;
+    width: 180px;
+    height: 40px;
+    text-align: left;
+}
+
+.filterdropdown{
+    
+}

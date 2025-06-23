@@ -1,0 +1,46 @@
+{%extends "template.html"%}
+
+{%block head%}
+    <link rel="stylesheet" href="../static/style3.css">
+{%endblock%}
+
+{%block main%}
+    <div class="info">
+        <p class="balance">Balance</p>
+        <p class="amount">$20,000</p>
+        <div class="cardbox">
+            <p class="card">DBS Multi-Currency</p>
+        </div>
+    </div>
+    <div class="transaction_custom">
+        <p class="thtag">Transaction History</p>
+        <div class="filter">
+            <label for="filterdropdown">Filters</label>
+            <select class="filterdropdown">
+            
+                <option><a href="www.google.com">1 day</a></option>
+                <option><a href="">1 week</a></option>
+                <option><a href="">1 month</a></option>
+            </select>
+        </div>
+        <a class="add_transaction" href="">Add Transaction</a>
+    </div>
+    <div class="transaction_list"></div>
+        <div class="transaction_info">
+            <div class="category&id">
+                <p>Expense Category: F&B</p>
+                <p>Transaction ID: 87654321</p>
+            </div>
+            <div class="showdetails">
+                <a class='detailspage' href="">Show details</a>
+            </div>
+        </div>
+        <div class="money_info">
+            <p class="money">-$40.0</p>
+        </div>
+    </div>
+{%endblock%}
+
+
+
+
