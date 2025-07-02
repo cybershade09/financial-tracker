@@ -5,6 +5,10 @@ html {
     font-family: Arial, sans-serif;
 }
 
+body{
+    padding:0px;
+    margin:0px;
+}
 .navbar {
     background-color: var(--highlight-green);
     display: flex;

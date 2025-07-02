@@ -4,8 +4,12 @@ from datetime import datetime, timedelta
 from tools import sql_read,sql_write
 
 def end_of_month_job():
-    if (datetime.today()+ timedelta(days=1)).day == 1:
-        
+    if datetime.today().month - (datetime.today()+ timedelta(days=1)).month == 1:
+        pass
+
+
+def daily_job():
+    
 
 
 

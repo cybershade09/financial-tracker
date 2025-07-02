@@ -1,0 +1,19 @@
+{%extends "template.html"%}
+
+{%block head%}
+    <title>Details</title>
+{%endblock%}
+
+{%block main%}
+    <h2 class="detail_tag">Transaction Details</h2>
+    <hr>
+    <div class="details_box">
+        <label for="tran_type">Transaction Type: {%"Income" if true else "Expense"%} </label>
+        <label for="amount">Amount: $40 </label>
+        <label for="category">Category: Income </label>
+        <label for="tran_date">Transaction Date: 1/7/2025 </label>
+        <label for="trans_id">Transaction ID: 8021f78273b84841ad59e017ab5f760e </label>
+        <label for="description">Description: Pay for June 2025 </label> 
+    </div>
+
+{%endblock%}

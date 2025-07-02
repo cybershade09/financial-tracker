@@ -1,0 +1,130 @@
+table, th, td {
+  border: 1px solid black;
+  border-collapse: collapse;
+  font-family: 'Archivo', 'sans-serif';
+  font-size: 20px;
+}
+
+.table{
+  width:100%;
+  display: flex;
+  justify-content: center
+}
+
+tr:nth-child(even) {
+  background-color: #D6EEEE;
+}
+
+#table > th,td{
+  width:20vw;
+}
+
+td {
+  text-align: center;
+}
+
+.data_form{
+    color: black;
+    font-family: 'Archivo', 'sans-serif';
+    border-radius: 20px;
+    font-size: 20px;
+}
+
+.balance{
+    font-size:25px;
+    padding-left: 30px;
+    color: black;
+    font-size: 40px
+}
+
+.total_value{
+  padding-top: 30px;
+  padding-left: 30px;
+  color: black;
+  font-size: 30px;
+}
+
+.enterCryptoName{
+  padding-left: 30px;
+  font-size: 20px;
+  margin-bottom: 3px;
+}
+
+.cryptoNameBox{
+  border-radius: 10px;
+}
+
+.cryptolist{
+  font-size:10px;
+  margin-left: 30px;
+  color: black;
+}
+
+.enterCryptoQuantity{
+  padding-left: 30px;
+  font-size: 20px;  
+}
+
+.cryptoQuantityBox{
+  border-radius: 10px;
+}
+
+.submitButton{
+  margin-left: 30px;
+  border-radius: 10px;
+  padding: 5px;
+  font-size: 16px;
+  background-color: #e5e175;
+}
+
+.assetsHeader{
+  padding-left: 30px;
+  font-size: 20px;
+  font-weight: bold
+}
+
+
+
+
+
+
+.Total_value{
+    padding-top: 15px;
+    padding-left: 30px;
+    color: black;
+    font-size: 30px;
+}
+
+
+
+.forex_table{
+    padding-left: 30px;
+}
+
+.currency{
+    width: 10%;
+    border: 1px solid;
+    border-radius: 4px;
+    font-size: 1em;
+}
+
+.value_curr{
+    padding-left: 30px;
+    font-size: 20px;
+    margin-bottom: 3px;
+}
+
+.container{
+    padding-left: 30px;
+}
+
+#currency{
+    width: 5%;
+    border: 1px solid;
+    border-radius: 4px;
+    font-size: 1em;
+}
+
+
+
+

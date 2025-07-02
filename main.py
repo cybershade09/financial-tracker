@@ -10,6 +10,7 @@ from cryptography.fernet import Fernet
 import json
 from datetime import date,datetime,timedelta
 import uuid
+import requests
 
 app = Flask(__name__)
 app.secret_key = 'YrXGAwNizmueI3G2a7K5rUErC8VcVof_ebSMPI0TBxY='
@@ -104,6 +105,7 @@ def process_SpendingAccount():
     SpendingAccounts = [SpendingAccount(*AccountData) for AccountData in sql_read(("SELECT * FROM SpendingAccount WHERE SpendingAccount.Approval  = 1;",))]
     if any([account.AccountName == account_name for account in SpendingAccounts]):
         flash("Spending Option already exists",category="danger")
+        return redirect(url_for('home'))
     SpendingAccounts = [SpendingAccount(*AccountData) for AccountData in sql_read(("SELECT * FROM SpendingAccount WHERE SpendingAccount.Approval  = 0;",))]
     if not any([account.AccountName == account_name for account in SpendingAccounts]):    
         sql_write(("INSERT INTO SpendingAccount(AccountName,Approval,RequestEmail) VALUES (?,?,?)",(account_name,False,session.get("email"))))
@@ -222,4 +224,25 @@ def process_request():
         sql_write(("DELETE From SpendingAccount WHERE SpendingAccount.AccountName = ?;",(approval[approval.index("-")+1:],)))
     return redirect(url_for('admin'))
 
+
+@app.route('/crypto_list')
+def crypto_list():
+    
+
+    url = "https://api.coingecko.com/api/v3/coins/list"
+    response = requests.get(url)
+    coins = response.json()
+
+
+    name = [coin["name"] for coin in coins]
+    return render_template("crypto_list.html",names=name)
+
+@app.route('/crypto')
+def crypto():
+
+    return render_template('crypto.html')
+
+@app.route('/forex')
+def forex():
+    return render_template('forex.html')
 app.run(port = 5000)

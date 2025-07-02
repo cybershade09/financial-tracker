@@ -1,5 +1,5 @@
 {%extends "template.html"%}
-{%from "macro.html" import cash_option%}
+{%from "macro.html" import cash_option,flash_messages%}
 {%block head%}
     <link rel="stylesheet" href="../static/style.css">
 {%endblock%}
@@ -9,9 +9,9 @@
         <h3>Total Balance</h2>
         <h2>{{"%.2f"|format(total_balance)}}</h3>
     </div>
+    {{flash_messages()}}
     <div class="cards">
         {%if accounts%}
-
             {%for account in accounts%}
                 <a href="{{url_for('history',AccountDetails = account[1])}}" class="card">
                     {{cash_option(account[0].NameOnCard,account[0].Amount,account[0].AccountName)}}

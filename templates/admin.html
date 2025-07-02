@@ -1,11 +1,9 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+{%extends "template.html"%}
+{%block head%}
     <title>Admin Panel</title>
-</head>
-<body>
+    <link rel="stylesheet" href = "../static/template.css">
+{%endblock%}
+{%block main%}
     {%if data%}
         <form action = "{{url_for('process_request')}}" method = "POST">
             <table>
@@ -19,8 +17,8 @@
                     <tr>
                         <td>{{row[0]}}</td>
                         <td>{{row[1]}}</td>
-                        <td><button name = "ApprovalStatus" value ="approve-{{row[0]}}">✓</button></td>
-                        <td><button name = "ApprovalStatus" value ="reject-{{row[0]}}">X</button></td>
+                        <td><button class = "RejectButton" name = "ApprovalStatus" value ="approve-{{row[0]}}">✓</button></td>
+                        <td><button class = "AcceptButton" name = "ApprovalStatus" value ="reject-{{row[0]}}">X</button></td>
                     </tr>
                 {%endfor%}
             </table>
@@ -28,5 +26,4 @@
     {%else%}
         <p>No requests</p>
     {%endif%}
-</body>
-</html>
+{%endblock%}

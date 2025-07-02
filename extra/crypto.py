@@ -5,6 +5,6 @@ response = requests.get(url)
 coins = response.json()
 
 
-name = {coin["name"].lower() for coin in coins}
+name = [coin["name"] for coin in coins]
 print(len(name) ,len(coins))
 

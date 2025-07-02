@@ -1,3 +1,5 @@
+{%from "macro.html" import flash_messages%}
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -41,6 +43,7 @@
                     <div class ="form">
                         <form class="login_details" action="{{url_for('process_login')}}" method="POST">
                             <h3 class="login">LOGIN</h3>
+                            {{flash_messages()}}
                             <p class="email_tag">Email</p>
                             <input required class="email_input" type="email" name="email">
                             <p class="password_tag">Password</p>

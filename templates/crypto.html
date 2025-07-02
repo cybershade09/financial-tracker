@@ -1,0 +1,54 @@
+{%extends "template.html"%}
+
+{%block head%}
+    <title>Crypto</title>
+    <link rel="stylesheet" href="../static/style4.css">
+{%endblock%}
+
+{%block main%}
+    <h3 class="total_value">Total Value</h3>
+    <h2 class="balance">$15,000</h2>
+
+    <div class="cryptoinput">
+        <form action="" method="POST">
+            <div class="cryptoCoin"> 
+                <p class="enterCryptoName">Enter Crypto Name: <input class="cryptoNameBox" type="text" name="cryptoName"></p>
+                <a class="cryptolist" href="">List of Cryptocurrencies</a> 
+            </div>
+
+            <div class="cryptoCurrency"> 
+                <p class="enterCryptoQuantity">Enter Crypto Quantity: <input class="cryptoQuantityBox" type="text" name="cryptoQuantity"></p>
+            </div>
+
+            <input class="submitButton" type="submit" value="Add Crypto"> 
+        </form>
+    </div>
+
+    <div class="assetstable">
+            <p class="assetsHeader">Crypto Assets</p> 
+            <div class="table">
+                <table id="table">
+                    <tr>
+                        <th>Name</th>
+                        <th>Price (USD)</th>
+                        <th>Quantity</th>
+                        <th>Value (USD)</th>
+                    </tr>
+                    <tr> 
+                        <td>Bitcoin</td>
+                        <td>$126,617</td>
+                        <td>0.5</td>
+                        <td>$15,000</td>
+                    </tr>
+                    <tr> 
+                        <td>Ethereum</td>
+                        <td>$2,393</td>
+                        <td>1.5</td>
+                        <td>$2,550</td>
+                    </tr>
+                </table>
+            </div>
+    </div>
+{%endblock%}    
+
+

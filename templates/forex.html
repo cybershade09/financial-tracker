@@ -1,0 +1,56 @@
+{%extends "template.html"%}
+
+{%block head%}
+    <title>Forex</title>
+    <link rel="stylesheet" href="../static/style4.css">
+    <link rel="stylesheet" href="../static/style.css">
+{%endblock%}
+
+{%block main%}
+    <h3 class="Total_value">Total Value</h3>
+    <h2 class="balance">$15,000</h2>
+    
+    <form class="data_form" method="POST">
+        <div class="container">
+            <label for="currency">Convert From: </label>
+            <select id="currency">
+                <option value="eur">EUR</option>
+                <option value="usd">USD</option>
+            </select>
+        </div>
+        <div class="result_box">
+            <label for="val_curr" class="value_curr">Value of Currency:</label><input class="cryptoQuantityBox" type="text" name="currency_value"><br><br>
+            <input class="submitButton" type="submit" value="Add Forex">
+        </div>
+
+    </form>
+    <div class="assetstable">
+        <p class="assetsHeader">Foreign Currency</p>
+        <div class="table">
+            <table class="forex_table" style="width:70%">
+                <tr>
+                    <th>Currency Name</th>
+                    <th>Amount(foreign rate)</th>
+                    <th>Exchange Rate(SGD per Foreign Currency)</th>
+                    <th>Value(SGD)</th>
+                </tr> 
+                <tr>
+                    <td>Japanese Yen</td>
+                    <td>1000</td>
+                    <td>0.0090</td>
+                    <td>8.97</td>
+                </tr>
+                <tr>
+                    <td>United States Dollars</td>
+                    <td>10000</td>
+                    <td>1.30</td>
+                    <td>12984.80</td>
+                </tr>
+            </table>
+        </div>
+    </div>
+{%endblock%} 
+
+    
+    
+ 

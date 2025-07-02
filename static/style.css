@@ -11,6 +11,12 @@ html{
 main{
     margin-bottom:50px;
 }
+
+.form_flashed{
+    width:100vw;
+    display:flex;
+    justify-content:center;
+}
 body{
     margin:0px;
     padding:0px;
@@ -263,4 +269,12 @@ body{
     display: flex;
     justify-content: center;
     padding: 20px;
+}
+
+.form__flashed--danger{
+    color:red;
+}
+
+.form__flashed--success{
+    color:green;
 }

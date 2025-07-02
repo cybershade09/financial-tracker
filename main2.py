@@ -1,7 +1,7 @@
 from flask import Flask,render_template,session, request, flash,url_for,redirect,abort
 import sqlite3
 from passlib.hash import pbkdf2_sha256
-from frameworks2 import User,Account,SpendingAccount,Transaction
+from frameworks import User,Account,SpendingAccount,Transaction
 from tools import get_user_info,sql_read,sql_write
 import os
 import functools
@@ -10,6 +10,7 @@ from cryptography.fernet import Fernet
 import json
 from datetime import date,datetime,timedelta
 import uuid
+import requests
 
 app = Flask(__name__)
 app.secret_key = 'YrXGAwNizmueI3G2a7K5rUErC8VcVof_ebSMPI0TBxY='
@@ -104,6 +105,7 @@ def process_SpendingAccount():
     SpendingAccounts = [SpendingAccount(*AccountData) for AccountData in sql_read(("SELECT * FROM SpendingAccount WHERE SpendingAccount.Approval  = 1;",))]
     if any([account.AccountName == account_name for account in SpendingAccounts]):
         flash("Spending Option already exists",category="danger")
+        return redirect(url_for('home'))
     SpendingAccounts = [SpendingAccount(*AccountData) for AccountData in sql_read(("SELECT * FROM SpendingAccount WHERE SpendingAccount.Approval  = 0;",))]
     if not any([account.AccountName == account_name for account in SpendingAccounts]):    
         sql_write(("INSERT INTO SpendingAccount(AccountName,Approval,RequestEmail) VALUES (?,?,?)",(account_name,False,session.get("email"))))
@@ -222,4 +224,27 @@ def process_request():
         sql_write(("DELETE From SpendingAccount WHERE SpendingAccount.AccountName = ?;",(approval[approval.index("-")+1:],)))
     return redirect(url_for('admin'))
 
+
+@app.route('/crypto_list')
+def crypto_list():
+    url = "https://api.coingecko.com/api/v3/coins/list"
+    response = requests.get(url)
+    coins = response.json()
+
+
+    name = [coin["name"] for coin in coins]
+    return render_template("crypto_list.html",names=name)
+
+@app.route('/crypto')
+@login_required
+def crypto():
+    data = sql_read(("SELECT Investment.*,InvestmentType.Price,InvestmentType.DateUploaded FROM Investment,InvestmentType WHERE Investment.InvstmentHeader = InvestmentType.InvestmentHeader AND Investment.Email = ?",(session.get("email"),)))
+
+    return render_template('crypto.html',data = data)
+
+@app.route('/forex')
+@login_required
+def forex():
+    data = sql_read(("SELECT * FROM Forex WHERE Forex.Email = ?;",(session.get("email"),)))
+    return render_template('forex.html',data = data)
 app.run(port = 5001)
