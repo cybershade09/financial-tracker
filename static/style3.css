@@ -1,42 +1,141 @@
+@import url('https://fonts.googleapis.com/css2?family=Archivo&display=swap');
+.info{
+    display: flex;
+    justify-content: space-between;
+}
+body{
+    padding:0px;
+    margin:0px;
+}
 .balance{
     color: black;
-    font-size: 50px;
-    font-family: 'Archivo', 'sans-serif'
+    padding-left: 50px;
+    font-size: 55px;
+    font-family: 'Archivo', 'sans-serif';
+
 }
 
 .amount{
     color: black;
-    font-size: 100px;
+    padding-left: 60px;
+    font-size: 55px;
     font-family: 'Archivo', 'sans-serif'
 }
 
 .cardbox{
-    width: 200px;
-    height: 40px;
+    width: 300px;
+    height: 80px;
     background-color: #e1fdfe;
     border-radius: 10px;
+    margin-top: 60px;
+    margin-right: 200px
+    
+
+    
 }
 
 .card{
     color: black;
-    font-size: 90px;
+    font-size: 30px;
     font-family: 'Archivo', 'sans-serif';
     text-align: center;
 }
 
+.transaction_custom{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
 .thtag{
     color: black;
-    font-size: 100px;
-    font-family: 'Archivo', 'sans-serif'
+    font-size: 55px;
+    font-family: 'Archivo', 'sans-serif';
+    margin-left: 60px
 }
 
 .filter{
-    background-color: ;
-    width: 180px;
+    background-color: #99e5dd;
+    border-radius: 10px;
+    padding-top: 10px;
+    width: 200px;
     height: 40px;
-    text-align: left;
+    text-align: center;
+    font-size: 30px;
+    font-family: 'Archivo', 'sans-serif';
 }
 
 .filterdropdown{
-    
+    background-color: #99e5dd;
+    color: black;
+    font-family: 'Archivo', 'sans-serif';
+    border-radius: 20px;
 }
+
+.filter_form{
+    display:flex;
+}
+.submitbutton{
+    background-color: #0cc1af;
+    border: 0px;
+    margin: 2px;
+    border-radius:50%;
+    height:30px;
+    width:30px;
+    font-size: 20px;
+}
+
+.submitbutton:hover{
+    background-color: #07a091;
+    border: 0px;
+    margin: 2px;
+    border-radius:50%;
+    height:30px;
+    width:30px;
+    font-size: 20px;
+}
+.addtransaction_box{
+    border: 2px solid black;
+    border-radius: 10px;
+    width:300px;
+    margin-right:60px;
+}
+
+.add_transaction{
+    color: black;
+    font-size: 40px;
+    font-family: 'Archivo', 'sans-serif';
+    text-align: center;
+    text-decoration: none
+
+}
+.test_container{
+    display: flex;
+    flex-direction: column;
+    align-items:center;
+    justify-content: space-around;
+
+}
+.transaction_list{
+    border: 2px solid black;
+    width:80vw;
+    margin: 20px auto 20px auto;
+    padding:20px;
+    border-radius :80px;
+    display:flex;
+    justify-content: space-between;
+}
+
+.money{
+    font-size: 50px;
+    font-family: 'Archivo', sans-serif;
+}
+.income{
+    color:#00c569;
+}
+
+.expense{
+    color:#c70000;
+}
+
+

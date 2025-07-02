@@ -8,7 +8,7 @@
 {%block main%}
   <h2>Add Transaction</h2>
   <div class = "transaction_form_container">
-    <form class="transaction_form">
+    <form class="transaction_form" method = "POST" action="{{url_for('process_transaction')}}">
       <label for="type">Select Transaction type</label>
       <select id="type" name="type">
         <option value="expense">Expense</option>
@@ -16,13 +16,13 @@
       </select>
 
       <label for="amount">Amount:</label>
-      <input type="text" id="amount" name="amount">
+      <input required type="number" min="0.01" step = "0.01" id="amount" name="amount">
 
       <label for="category">Category:</label>
       <input type="text" id="category" name="category">
 
       <label for="date">Date:</label>
-      <input type="date" id="date" name="date">
+      <input type="date" id="date" name="date" required max="{{current_date}}">
 
       <label for="description">Description:</label>
       <textarea id="description" name="description"></textarea>

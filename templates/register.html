@@ -13,13 +13,16 @@
             <img class="small_logo" src="../static/logo.svg">
             <p class = "logo_title">FinanceLens</p>
         </div>
+         <div class = "login_container">
+                <a class="loginlink" href="{{url_for('home')}}">← Login Page</a>
+        </div>
     </header>
     <main class ="register_main">
-        <div class = "form_2">
+        <div class = "form form_2">
             <form class="register" action="{{url_for('.process_register')}}" method="POST">
                 <h3 class="register_tag">REGISTER</h3>
                 <p class="email_tags">Email</p>
-                <input type="text" name="email" class="email_inputs">
+                <input type="email" name="email" class="email_inputs">
                 <p class="name_tag">Name</p>
                 <input type="text" name="name" class="name_inputs">
                 <p class="password_tags">Password</p>
@@ -31,5 +34,9 @@
             </form>
         </div>
     </main>
+    <footer class = "footer" style="display:flex;justify-content:center;">
+        {%block footer_content%}{%endblock%}
+        <small>Copyright &copy;2025. FinanceLens. All rights reserved</small>
+    </footer>
 </body>
 </html>    

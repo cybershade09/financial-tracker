@@ -1,3 +1,14 @@
+@import url('https://fonts.googleapis.com/css2?family=Archivo:wght@400;700&display=swap');
+
+html{
+    --form-green:#99e5dd;
+    --header-green: #0cc1af;
+    --button-yellow: #e5e175;
+    --font-family: 'Archivo', 'sans-serif';
+    padding:0px;
+    margin:0px;
+}
+
 /* add transactions page*/
 body {
   font-family: Arial, sans-serif;
@@ -75,8 +86,13 @@ button:hover {
 }
 
 /* add accounts page*/
-
-.accounts_form,
+.accounts_form,.other_accounts_form{
+  width:100vw;
+  display: flex;
+  justify-content: center;
+  padding:20px
+}
+.accounts,
 .other_accounts{
     background-color: white;
     padding: 30px;
@@ -87,6 +103,8 @@ button:hover {
     flex-direction: column;
   
 }
+
+
 
 .card_dropdown{
     width: 100%;

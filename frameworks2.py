@@ -24,4 +24,11 @@ class SpendingAccount:
         self.RequestEmail = RequestEmail
  
 class Transaction:
-    def __init__(self,Name)
+    def __init__(self,TransactionID,AccountID,Date,Amount,Description,Category,IsExpense):
+        self.TransactionID = TransactionID
+        self.AccountID = AccountID
+        self.Date = Date
+        self.Amount = Amount
+        self.Description = Description
+        self.Category = Category
+        self.IsExpense = IsExpense

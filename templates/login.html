@@ -42,9 +42,9 @@
                         <form class="login_details" action="{{url_for('process_login')}}" method="POST">
                             <h3 class="login">LOGIN</h3>
                             <p class="email_tag">Email</p>
-                            <input class="email_input" type="text" name="email">
+                            <input required class="email_input" type="email" name="email">
                             <p class="password_tag">Password</p>
-                            <input class="password_input" type="password" name="password">
+                            <input required class="password_input" type="password" name="password">
                             <p class="register_link">Don't have an account? Register <a id="link" href="{{url_for('register')}}">here</a></p>
                             <br>
                             <input class="submit_login" type="submit" value="Login">
@@ -54,5 +54,9 @@
             </tr>
         </table>
     </main>
+    <footer class = "footer" style="display:flex;justify-content:center;">
+        {%block footer_content%}{%endblock%}
+        <small>Copyright &copy;2025. FinanceLens. All rights reserved</small>
+    </footer>
 </body>
 </html>

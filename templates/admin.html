@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel</title>
+</head>
+<body>
+    {%if data%}
+        <form action = "{{url_for('process_request')}}" method = "POST">
+            <table>
+                <tr>
+                    <th>Account Name</th>
+                    <th> Request Email</th>
+                    <th>Approve</th>
+                    <th>reject</th>
+                </tr>
+                {%for row in data%}
+                    <tr>
+                        <td>{{row[0]}}</td>
+                        <td>{{row[1]}}</td>
+                        <td><button name = "ApprovalStatus" value ="approve-{{row[0]}}">✓</button></td>
+                        <td><button name = "ApprovalStatus" value ="reject-{{row[0]}}">X</button></td>
+                    </tr>
+                {%endfor%}
+            </table>
+        </form>
+    {%else%}
+        <p>No requests</p>
+    {%endif%}
+</body>
+</html>

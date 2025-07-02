@@ -5,23 +5,22 @@
     <link rel="stylesheet" href="../static/template.css">
 </head>
 <body>
-    <header>   
-        
-        <div class = 'category_container category_highlighted'>
-            <a class="category" href="">Cash</a>
-        </div>
-        <div class = 'category_container'>
-            <a class="category" href="">Investment</a>
-        </div>   
-        <div class = 'category_container'>
-            <a class="category" href="">Foreign Exchange</a> 
-        </div>
-        <div class = 'category_container'>
-            <a class="category" href="">Net Worth</a> 
-        </div>
-        <div class = 'logout_html'>
-            <a class="logout_link" href="">Logout</a>
-        </div>
+    <header class="navbar">
+    <div class="logo">
+        <img src="../static/logo.svg" alt="FinanceLens Logo">
+        <span>FinanceLens</span>
+    </div>
+
+    <nav class="nav-links">
+        <a class="category {%if request.endpoint =='home'%}category_highlighted{%endif%}" href="{{url_for('home')}}">Cash</a>
+        <a class="category" href="">Investment</a>
+        <a class="category" href="">Foreign Exchange</a>
+        <a class="category" href="">Net Worth</a>
+    </nav>
+
+    <div class="logout_html">
+        <a class="logout_link" href="{{url_for('logout')}}">LOGOUT</a>
+    </div>
  
     </header>
     <main>
