@@ -9,7 +9,7 @@ from dotenv import load_dotenv
 from cryptography.fernet import Fernet
 import json
 from datetime import date,datetime,timedelta
-import uuid
+import uuidk
 import requests
 
 app = Flask(__name__)
