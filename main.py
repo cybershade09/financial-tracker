@@ -9,7 +9,7 @@ from dotenv import load_dotenv
 from cryptography.fernet import Fernet
 import json
 from datetime import date,datetime,timedelta
-import uuidk
+import uuid
 import requests
 
 app = Flask(__name__)
@@ -227,8 +227,6 @@ def process_request():
 
 @app.route('/crypto_list')
 def crypto_list():
-    
-
     url = "https://api.coingecko.com/api/v3/coins/list"
     response = requests.get(url)
     coins = response.json()
@@ -238,11 +236,15 @@ def crypto_list():
     return render_template("crypto_list.html",names=name)
 
 @app.route('/crypto')
+@login_required
 def crypto():
+    data = sql_read(("SELECT Investment.*,InvestmentType.Price,InvestmentType.DateUploaded FROM Investment,InvestmentType WHERE Investment.InvstmentHeader = InvestmentType.InvestmentHeader AND Investment.Email = ?",(session.get("email"),)))
 
-    return render_template('crypto.html')
+    return render_template('crypto.html',data = data)
 
 @app.route('/forex')
+@login_required
 def forex():
-    return render_template('forex.html')
+    data = sql_read(("SELECT * FROM Forex WHERE Forex.Email = ?;",(session.get("email"),)))
+    return render_template('forex.html',data = data)
 app.run(port = 5000)
