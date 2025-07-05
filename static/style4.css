@@ -125,6 +125,33 @@ td {
     font-size: 1em;
 }
 
+.update{
+  width:50px;
+  border-radius:5px
+}
 
+.change{
+  border-radius: 50%;
+  border:0px;
+  height:95%;
+  aspect-ratio: 1/1;
+}
 
+.add{
+  background-color:#00c569;
+  color:#fff;
+}
 
+.remove{
+  background-color:#c70000;
+  color:#fff;
+}
+
+.delete_link{
+  background-color: rgba(0,0,0,0);
+  border:0px;
+}
+
+.delete_link:hover{
+  color:#c70000;
+}

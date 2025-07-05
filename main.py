@@ -13,8 +13,8 @@ import uuid
 import requests
 
 app = Flask(__name__)
-app.secret_key = 'YrXGAwNizmueI3G2a7K5rUErC8VcVof_ebSMPI0TBxY='
 load_dotenv()
+app.secret_key = os.getenv("SECRET_KEY")
 
 def login_required(route):
     @functools.wraps(route)
@@ -197,6 +197,19 @@ def process_transaction():
             
             return redirect(url_for('history',AccountDetails = cipher.encrypt(json.dumps(account.to_dict()).encode()).decode()))
 
+@app.route("/transaction_details/<transactionID>")
+@login_required
+def transaction_details(transactionID):
+    transaction = sql_read(("SELECT Transactions.*,TransactionType.IsExpense FROM Transactions,TransactionType WHERE TransactionType.TransactionID = Transactions.TransactionID AND Transactions.TransactionID = ?;",(transactionID,)),0)
+    if not transaction:
+        return redirect(url_for('home'))
+    
+    transaction = Transaction(*transaction)
+    if sql_read(("SELECT AccountIDMap.Email FROM AccountIDMap WHERE AccountIDMAP.AccountID = ?;",(transaction.AccountID,)),0)[0] != session.get("email"):
+        return abort(403)
+    
+    return render_template("view_details.html",transaction = transaction)
+
 @app.route('/logout')
 @login_required
 def logout():
@@ -227,24 +240,96 @@ def process_request():
 
 @app.route('/crypto_list')
 def crypto_list():
-    url = "https://api.coingecko.com/api/v3/coins/list"
-    response = requests.get(url)
-    coins = response.json()
-
-
-    name = [coin["name"] for coin in coins]
+    name = [(i+1,coin["name"],coin["symbol"]) for i,coin in enumerate(requests.get("https://api.coingecko.com/api/v3/coins/list").json())]
     return render_template("crypto_list.html",names=name)
 
-@app.route('/crypto')
+@app.route('/investment')
 @login_required
-def crypto():
-    data = sql_read(("SELECT Investment.*,InvestmentType.Price,InvestmentType.DateUploaded FROM Investment,InvestmentType WHERE Investment.InvstmentHeader = InvestmentType.InvestmentHeader AND Investment.Email = ?",(session.get("email"),)))
+def investment():
 
-    return render_template('crypto.html',data = data)
+    data = sql_read(("SELECT Investment.InvestmentHeader,Investment.Quantity FROM Investment WHERE Investment.Email = ?;",(session.get("email"),)))
+    
+    
+    data = sql_read(("SELECT Investment.InvestmentHeader,Investment.Quantity FROM Investment WHERE Investment.Email = ?;",(session.get("email"),)))
+    data_formatted = []
+    for name,Quantity in data:
+        price = requests.get("https://api.coingecko.com/api/v3/simple/price", params={'ids': name,'vs_currencies': 'sgd'}).json()
+        if price:
+            price = price[name]['sgd']
+            data_formatted.append((name,f"{price:.2f}",Quantity,f"{price*Quantity:.2f}"))
+        else:
+            data_formatted.append((name,"-",Quantity,"-"))
+    
+        
+    return render_template('crypto.html',data = data_formatted,value = f"{sum(float(row[-1]) for row in data_formatted if row[-1]!='-'):.2f}")
 
+@app.route("/add_investments",methods = ["POST"])
+@login_required
+def add_investments():
+    if request.form["cryptoName"] not in [coin["symbol"] for coin in requests.get("https://api.coingecko.com/api/v3/coins/list").json()]:
+        flash("⚠ Invalid Cryptocurrency",category = "danger")
+        return redirect(url_for('investment'))
+    else:
+        data = request.form
+        past = sql_read(("SELECT Investment.Quantity FROM Investment WHERE Investment.Email = ? AND Investment.InvestmentHeader = ?;",(session.get("email"),data["cryptoName"])),0)
+        if not past:
+            
+            sql_write(("INSERT INTO Investment(Email,InvestmentHeader,Quantity) VALUES (?,?,?);",(session.get("email"),data["cryptoName"],data["cryptoQuantity"])))
+            flash("Currency Added Successfully",category = "success")
+        else:
+            sql_write(("UPDATE Investment SET Quantity = ? WHERE Investment.Email = ? AND Investment.InvestmentHeader = ?;",(data["cryptoQuantity"] + past[0],session.get("email"),data["cryptoName"])))
+            flash("Currency updated Successfully",category = "success")
+        return redirect(url_for('investment'))
+
+@app.route('/update_investment/<crypto>/<int:option>',methods = ['POST'])
+@login_required
+def update_investment(crypto,option):
+    if option not in [0,1,2]:
+        flash("Option not available",category="danger")
+    elif int(option)<2:
+        data = request.form
+        past = sql_read(("SELECT Investment.Quantity FROM Investment WHERE Investment.Email = ? AND Investment.InvestmentHeader = ?;",(session.get("email"),crypto)),0)
+        sql_write(("UPDATE Investment SET Quantity = ? WHERE Investment.Email = ? AND Investment.InvestmentHeader = ?;",([1,-1][int(option)]*float(data["crypto_increase"]) + past[0],session.get("email"),crypto)))
+        flash("Crypto updated Successfully",category = "success")
+    else:
+        sql_write(("DELETE FROM Investment WHERE Investment.Email = ? AND Investment.InvestmentHeader = ?;",(session.get("email"),crypto)))
+        flash("Crypto deleted successfully",category="success")
+    return redirect(url_for('investment'))
+ 
 @app.route('/forex')
 @login_required
 def forex():
-    data = sql_read(("SELECT * FROM Forex WHERE Forex.Email = ?;",(session.get("email"),)))
-    return render_template('forex.html',data = data)
+    data = sql_read(("SELECT Forex.ForeignCountry,Forex.Amount FROM Forex WHERE Forex.Email = ?;",(session.get("email"),)))
+    rates = requests.get("https://api.frankfurter.app/latest?from=SGD").json()['rates']
+    data = [(currency,amount,rates[currency],f"{rates[currency]*amount:.2f}") for currency,amount in data]
+    return render_template('forex.html',options = list(rates.keys()),data = data,value = f"{sum(float(row[-1]) for row in data):.2f}")
+
+@app.route('/add_forex',methods = ['POST'])
+@login_required
+def add_forex():
+    data = request.form
+    past = sql_read(("SELECT Forex.Amount FROM Forex WHERE Forex.Email = ? AND Forex.ForeignCountry = ?;",(session.get("email"),data["currency"])),0)
+    if not past:
+        sql_write(("INSERT INTO Forex(Email,ForeignCountry,Amount) VALUES (?,?,?);",(session.get("email"),data["currency"],float(data["currency_value"]))))
+        flash("Currency Added Successfully",category = "success")
+    else:
+        sql_write(("UPDATE Forex SET Amount = ? WHERE Forex.Email = ? AND Forex.ForeignCountry = ?;",(float(data["currency_value"]) + past[0],session.get("email"),data["currency"])))
+        flash("Currency updated Successfully",category = "success")
+
+    return redirect(url_for('forex'))
+
+@app.route('/update_forex/<currency>/<int:option>',methods = ['POST'])
+@login_required
+def update_forex(currency,option):
+    if option not in [0,1,2]:
+        flash("Option not available",category="danger")
+    elif int(option)<2:
+        past = sql_read(("SELECT Forex.Amount FROM Forex WHERE Forex.Email = ? AND Forex.ForeignCountry = ?;",(session.get("email"),currency)),0)
+        sql_write(("UPDATE Forex SET Amount = ? WHERE Forex.Email = ? AND Forex.ForeignCountry = ?;",([1,-1][int(option)]*float(request.form["currency_increase"]) + past[0],session.get("email"),currency)))
+        flash("Currency updated Successfully",category = "success")
+    else:
+        sql_write(("DELETE FROM Forex WHERE Forex.Email = ? AND Forex.ForeignCountry = ?;",(session.get("email"),currency)))
+        flash("Currency deleted successfully",category="success")
+    return redirect(url_for('forex'))
+
 app.run(port = 5000)

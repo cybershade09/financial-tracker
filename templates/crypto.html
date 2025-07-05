@@ -1,51 +1,79 @@
 {%extends "template.html"%}
-
+{%from "macro.html" import trashcan,flash_messages%}
 {%block head%}
     <title>Crypto</title>
     <link rel="stylesheet" href="../static/style4.css">
+    <link rel="stylesheet" href="../static/style.css">
 {%endblock%}
 
 {%block main%}
     <h3 class="total_value">Total Value</h3>
-    <h2 class="balance">$15,000</h2>
+    <h2 class="balance">${{value}}</h2>
 
     <div class="cryptoinput">
-        <form action="" method="POST">
+        <form action="{{url_for('add_investments')}}" method="POST">
             <div class="cryptoCoin"> 
-                <p class="enterCryptoName">Enter Crypto Name: <input class="cryptoNameBox" type="text" name="cryptoName"></p>
-                <a class="cryptolist" href="">List of Cryptocurrencies</a> 
+                <p class="enterCryptoName">Enter Coin Symbol: <input class="cryptoNameBox" type="text" required name="cryptoName"></p>
+                <a class="cryptolist" href="{{url_for('crypto_list')}}">List of Cryptocurrencies</a> 
             </div>
 
             <div class="cryptoCurrency"> 
-                <p class="enterCryptoQuantity">Enter Crypto Quantity: <input class="cryptoQuantityBox" type="text" name="cryptoQuantity"></p>
+                <p class="enterCryptoQuantity">Enter Crypto Quantity: <input class="cryptoQuantityBox" type="number" min="0.01" step ="0.01", name="cryptoQuantity"></p>
             </div>
 
             <input class="submitButton" type="submit" value="Add Crypto"> 
         </form>
     </div>
-
+    {{flash_messages()}}
     <div class="assetstable">
             <p class="assetsHeader">Crypto Assets</p> 
-            <div class="table">
-                <table id="table">
+            <div class="table" style="width:100%; display:flex;justify-content:center;">
+                <table class="forex_table" style="width:70%">
                     <tr>
                         <th>Name</th>
-                        <th>Price (USD)</th>
+                        <th>Price (SGD)</th>
                         <th>Quantity</th>
-                        <th>Value (USD)</th>
+                        <th>Value (SGD)</th>
+                        <th>Add Amount</th>
+                        <th>Remove Amount</th>
+                        <th>Delete</th>
                     </tr>
-                    <tr> 
-                        <td>Bitcoin</td>
-                        <td>$126,617</td>
-                        <td>0.5</td>
-                        <td>$15,000</td>
-                    </tr>
-                    <tr> 
-                        <td>Ethereum</td>
-                        <td>$2,393</td>
-                        <td>1.5</td>
-                        <td>$2,550</td>
-                    </tr>
+                    {%if data%}
+                        {%for row in data%}
+                            <tr>
+                                {%for item in row%}
+                                    <td>{{item}}</td>
+                                {%endfor%}
+                                <td>
+                                    <form method = "POST" action = "{{url_for('update_investment',crypto=row[0],option=0)}}">
+                                        Value: <input class="update" type="number" required min="0.01" step = "0.01" name="crypto_increase">
+                                        <input class="change add" type="submit" value="+">
+                                    </form>
+                                </td>
+                                <td>
+                                    <form method = "POST" action = "{{url_for('update_investment',crypto=row[0],option=1)}}">
+                                        Value: <input class="update" type="number" required min="0.01" step = "0.01" max="{{row[2]}}" name="crypto_increase">
+                                        <input class="change remove" type="submit" value="-">
+                                    </form>
+                                </td>
+                                <td>
+                                    <form action = "{{url_for('update_investment',crypto=row[0],option=2)}}" method="POST">
+                                        <button class="delete_link" type = "submit" >{{trashcan('delete')}}</button>
+                                    </form>
+                                </td>
+                            </tr>
+                        {%endfor%}  
+                    {%else%}
+                        <tr>
+                            <td>-</td>
+                            <td>-</td>
+                            <td>-</td>
+                            <td>-</td>
+                            <td>-</td>
+                            <td>-</td>
+                            <td>-</td>
+                        </tr>
+                    {%endif%}
                 </table>
             </div>
     </div>

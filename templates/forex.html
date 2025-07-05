@@ -1,5 +1,5 @@
 {%extends "template.html"%}
-
+{%from "macro.html" import flash_messages,trashcan%}
 {%block head%}
     <title>Forex</title>
     <link rel="stylesheet" href="../static/style4.css">
@@ -8,22 +8,23 @@
 
 {%block main%}
     <h3 class="Total_value">Total Value</h3>
-    <h2 class="balance">$15,000</h2>
+    <h2 class="balance">${{value}}</h2>
     
-    <form class="data_form" method="POST">
+    <form class="data_form" action ="{{url_for('add_forex')}}" method="POST">
         <div class="container">
             <label for="currency">Convert From: </label>
-            <select id="currency">
-                <option value="eur">EUR</option>
-                <option value="usd">USD</option>
+            <select id="currency" name="currency">
+                {%for option in options%}
+                    <option value="{{option}}">{{option}}</option>
+                {%endfor%}
             </select>
         </div>
         <div class="result_box">
-            <label for="val_curr" class="value_curr">Value of Currency:</label><input class="cryptoQuantityBox" type="text" name="currency_value"><br><br>
+            <label for="val_curr" class="value_curr">Value of Currency:</label><input class="cryptoQuantityBox" type="number" required min="0.01" step = "0.01" name="currency_value"><br><br>
             <input class="submitButton" type="submit" value="Add Forex">
         </div>
-
     </form>
+    {{flash_messages()}}
     <div class="assetstable">
         <p class="assetsHeader">Foreign Currency</p>
         <div class="table">
@@ -33,19 +34,46 @@
                     <th>Amount(foreign rate)</th>
                     <th>Exchange Rate(SGD per Foreign Currency)</th>
                     <th>Value(SGD)</th>
+                    <th>Add Amount</th>
+                    <th>Remove Amount</th>
+                    <th>Delete</th>
                 </tr> 
-                <tr>
-                    <td>Japanese Yen</td>
-                    <td>1000</td>
-                    <td>0.0090</td>
-                    <td>8.97</td>
-                </tr>
-                <tr>
-                    <td>United States Dollars</td>
-                    <td>10000</td>
-                    <td>1.30</td>
-                    <td>12984.80</td>
-                </tr>
+                {%if data%}
+                    {%for row in data%}
+                        <tr>
+                            {%for item in row%}
+                                <td>{{item}}</td>
+                            {%endfor%}
+                            <td>
+                                <form method = "POST" action = "{{url_for('update_forex',currency=row[0],option=0)}}">
+                                    Value: <input class="update" type="number" required min="0.01" step = "0.01" name="currency_increase">
+                                    <input class="change add" type="submit" value="+">
+                                </form>
+                            </td>
+                            <td>
+                                <form method = "POST" action = "{{url_for('update_forex',currency=row[0],option=1)}}">
+                                    Value: <input class="update" type="number" required min="0.01" step = "0.01" max="{{row[1]}}" name="currency_increase">
+                                    <input class="change remove" type="submit" value="-">
+                                </form>
+                            </td>
+                            <td>
+                                <form action = "{{url_for('update_forex',currency=row[0],option=2)}}" method="POST">
+                                    <button class="delete_link" type = "submit" >{{trashcan('delete')}}</button>
+                                </form>
+                            </td>
+                        </tr>
+                    {%endfor%}  
+                {%else%}
+                    <tr>
+                        <td>-</td>
+                        <td>-</td>
+                        <td>-</td>
+                        <td>-</td>
+                        <td>-</td>
+                        <td>-</td>
+                        <td>-</td>
+                    </tr>
+                {%endif%}
             </table>
         </div>
     </div>

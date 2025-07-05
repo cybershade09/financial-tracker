@@ -28,3 +28,4 @@ def get_forew_price():
     print(len(data["rates"]))
     for currency, rate in data["rates"].items():
         print(f"SGD to {currency}: {rate}")
+        

@@ -44,7 +44,7 @@
                                 <p>Transaction ID: {{transaction.TransactionID}}</p>
                             </div>
                             <div class="showdetails">
-                                <a class='detailspage' href="">Show details</a>
+                                <a class='detailspage' href="{{url_for('transaction_details',transactionID = transaction.TransactionID)}}">Show details</a>
                             </div>
                         </div>
                         <div class="money_info">
@@ -59,7 +59,7 @@
                                 <p>Transaction ID: {{transaction.TransactionID}}</p>
                             </div>
                             <div class="showdetails">
-                                <a class='detailspage' href="">Show details</a>
+                                <a class='detailspage' href="{{url_for('transaction_details',transactionID = transaction.TransactionID)}}">Show details</a>
                             </div>
                         </div>
                         <div class="money_info">

@@ -13,8 +13,8 @@
 
     <nav class="nav-links">
         <a class="category {%if request.endpoint =='home'%}category_highlighted{%endif%}" href="{{url_for('home')}}">Cash</a>
-        <a class="category" href="">Investment</a>
-        <a class="category" href="">Foreign Exchange</a>
+        <a class="category {%if request.endpoint =='investment'%}category_highlighted{%endif%}" href="{{url_for('investment')}}">Investment</a>
+        <a class="category {%if request.endpoint =='forex'%}category_highlighted{%endif%}" href="{{url_for('forex')}}">Foreign Exchange</a>
         <a class="category" href="">Net Worth</a>
     </nav>
 

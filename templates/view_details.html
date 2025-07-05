@@ -8,12 +8,14 @@
     <h2 class="detail_tag">Transaction Details</h2>
     <hr>
     <div class="details_box">
-        <label for="tran_type">Transaction Type: {%"Income" if true else "Expense"%} </label>
-        <label for="amount">Amount: $40 </label>
-        <label for="category">Category: Income </label>
-        <label for="tran_date">Transaction Date: 1/7/2025 </label>
-        <label for="trans_id">Transaction ID: 8021f78273b84841ad59e017ab5f760e </label>
-        <label for="description">Description: Pay for June 2025 </label> 
+        <p for="tran_type">Transaction Type: {%if transaction.IsExpense%}Expense{%else%}Income{%endif%} </p>
+        <p for="amount">Amount: ${{transaction.Amount}} </p>
+        {% if transaction.IsExpense%}
+            <p for="category">Category: {{transaction.Category}}</p>
+        {%endif%}
+        <p for="tran_date">Transaction Date: {{transaction.Date}} </p>
+        <p for="trans_id">Transaction ID: {{transaction.TransactionID}}</p>
+        <p for="description">Description: {{transaction.Description}}</p> 
     </div>
 
 {%endblock%}

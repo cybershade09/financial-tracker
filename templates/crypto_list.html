@@ -1,11 +1,20 @@
 {%extends "template.html"%}
-
+{%block head%}
+    <title>Crypto List</title>
+{%endblock%}
 {%block main%}
-
-    <h1>Name</h1>
-    <ol style="margin-left:20vw;">
-    {%for name in names%}
-        <li>{{name}}</li>
-    {%endfor%}
-    </ol>
+    <table style="margin:0 auto 0 auto;">
+        <tr>
+            <th>index</th>
+            <th>Name</th>
+            <th>Coin Symbol</th>
+        </tr>
+        {%for name in names%}
+            <tr>
+                {%for item in name%}
+                    <td>{{item}}</td>
+                {%endfor%}
+            </tr>
+        {%endfor%}
+    </table>
 {%endblock%}

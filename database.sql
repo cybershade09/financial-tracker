@@ -17,7 +17,6 @@ CREATE TABLE Investment(
     Quantity REAL NOT NULL,
     PRIMARY KEY (Email, InvestmentHeader),
     FOREIGN KEY (Email) REFERENCES User(Email),
-    FOREIGN KEY (InvestmentHeader) REFERENCES InvestmentType(InvestmentHeader)
 );
 
 CREATE TABLE Forex(
@@ -25,8 +24,7 @@ CREATE TABLE Forex(
     ForeignCountry TEXT NOT NULL,
     Amount REAL NOT NULL,
     PRIMARY KEY (Email, ForeignCountry),
-    FOREIGN KEY (Email) REFERENCES User(Email),
-    FOREIGN KEY (ForeignCountry) REFERENCES ForexType(ForeignCountry)
+    FOREIGN KEY (Email) REFERENCES User(Email)
 );
                                              
 CREATE TABLE Account(
