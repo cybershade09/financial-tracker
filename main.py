@@ -391,4 +391,8 @@ ORDER BY Transactions.Date ASC;
     
     return render_template("networth.html",history_data=history_data,range_list=range_list, maximum = maximum_value, amount = amount + forex_amount + crypto_amount)
 
+@app.errorhandler(404)
+def page_not_found(e):
+    return render_template("404.html"),404
+
 app.run(port = 5000)

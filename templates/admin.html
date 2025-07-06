@@ -2,10 +2,13 @@
 {%block head%}
     <title>Admin Panel</title>
     <link rel="stylesheet" href = "../static/template.css">
+    <link rel="stylesheet" href = "../static/style.css">
+    <link rel="stylesheet" href="../static/style4.css">
 {%endblock%}
 {%block main%}
+    <h1 style="margin-left:30px;"><b>Requests</b></h1>
     {%if data%}
-        <form action = "{{url_for('process_request')}}" method = "POST">
+        <form action = "{{url_for('process_request')}}" method = "POST" style="display:flex;justify-content:center;margin-top:20px">
             <table>
                 <tr>
                     <th>Account Name</th>
@@ -17,13 +20,15 @@
                     <tr>
                         <td>{{row[0]}}</td>
                         <td>{{row[1]}}</td>
-                        <td><button class = "RejectButton" name = "ApprovalStatus" value ="approve-{{row[0]}}">✓</button></td>
-                        <td><button class = "AcceptButton" name = "ApprovalStatus" value ="reject-{{row[0]}}">X</button></td>
+                        <td><button style="border-radius:15%;border:0px;background-color:green" name = "ApprovalStatus" value ="approve-{{row[0]}}">✓</button></td>
+                        <td><button style="border-radius:15%;border:0px;background-color:red" name = "ApprovalStatus" value ="reject-{{row[0]}}">X</button></td>
                     </tr>
                 {%endfor%}
             </table>
         </form>
     {%else%}
-        <p>No requests</p>
+    <div style="display:flex;justify-content:center;">
+        <h1>No requests</h1>
+    </div>
     {%endif%}
 {%endblock%}
