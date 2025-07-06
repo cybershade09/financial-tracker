@@ -18,7 +18,7 @@
             </div>
 
             <div class="cryptoCurrency"> 
-                <p class="enterCryptoQuantity">Enter Crypto Quantity: <input class="cryptoQuantityBox" type="number" min="0.01" step ="0.01", name="cryptoQuantity"></p>
+                <p class="enterCryptoQuantity">Enter Crypto Quantity: <input class="cryptoQuantityBox" required type="number" min="0.01" step ="0.01", name="cryptoQuantity"></p>
             </div>
 
             <input class="submitButton" type="submit" value="Add Crypto"> 
@@ -26,7 +26,8 @@
     </div>
     {{flash_messages()}}
     <div class="assetstable">
-            <p class="assetsHeader">Crypto Assets</p> 
+            <p class="assetsHeader">Crypto Assets</p>
+            <p style="font-size:10px;margin-left:30px;margin-top:0px;">NOTE: Crypto Prices may not load or be accurate all the time</p>
             <div class="table" style="width:100%; display:flex;justify-content:center;">
                 <table class="forex_table" style="width:70%">
                     <tr>

@@ -215,6 +215,8 @@ def transaction_details(transactionID):
 def logout():
     session.clear()
     return redirect(url_for('home'))
+
+
 @app.route('/admin')
 @login_required
 def admin():
@@ -247,8 +249,6 @@ def crypto_list():
 @login_required
 def investment():
 
-    data = sql_read(("SELECT Investment.InvestmentHeader,Investment.Quantity FROM Investment WHERE Investment.Email = ?;",(session.get("email"),)))
-    
     
     data = sql_read(("SELECT Investment.InvestmentHeader,Investment.Quantity FROM Investment WHERE Investment.Email = ?;",(session.get("email"),)))
     data_formatted = []
@@ -331,5 +331,64 @@ def update_forex(currency,option):
         sql_write(("DELETE FROM Forex WHERE Forex.Email = ? AND Forex.ForeignCountry = ?;",(session.get("email"),currency)))
         flash("Currency deleted successfully",category="success")
     return redirect(url_for('forex'))
+
+@app.route("/networth")
+@login_required
+def networth():
+    # History processing
+    sql = """
+SELECT Transactions.Date,Transactions.Amount, TransactionType.IsExpense FROM Transactions,TransactionType,AccountIDMap,Account 
+WHERE TransactionType.TransactionID = Transactions.TransactionID AND AccountIDMap.Email = Account.Email AND Transactions.AccountID = AccountIDMAP.AccountID AND AccountIDMap.Email = ?
+ORDER BY Transactions.Date ASC;
+    """
+    history = sql_read((sql,(session.get("email"),)))
+    history_data = {}
+    for record in history:
+        history_data[record[0][:7]] = history_data.get("record[0][:7]",0)+(record[1]*[1,-1][record[2]])
+    first = list(history_data.items())[0][1]
+    
+    
+    amount = sql_read(("SELECT SUM(Account.Amount) FROM Account WHERE Account.Email = ?;",(session.get("email"),)),0)[0] + sum(history_data.values())
+    range_list = []
+    minimum = list(history_data.items())[0][0]
+    year,month = tuple(map(int,minimum.split("-")))
+    
+    while f"{year}-{month:02d}"<=f"{datetime.today().year}-{datetime.today().month:02d}":
+        range_list.append(f"{year}-{month:02d}")
+        year += (month+1)//13
+        month = (month%12)+1
+    
+    for key in range_list:
+        value = history_data.get(key,0)
+        history_data[key] =history_data.get(key,0) +  amount
+        amount += value
+    
+    year,month = tuple(map(int,minimum.split("-")))
+    year -= 1 if month == 1 else 0
+    month = list(range(1,13))[month-2]
+    range_list = [f"{year}-{month:02d}"] + range_list
+    history_data[f"{year}-{month:02d}"] = history_data.get(minimum)-first
+    maximum_value = max(list(history_data.values()))
+    
+    amount = sql_read(("SELECT SUM(Account.Amount) FROM Account WHERE Account.Email = ?;",(session.get("email"),)),0)[0] + sum(history_data.values())
+    data = sql_read(("SELECT Forex.ForeignCountry,Forex.Amount FROM Forex WHERE Forex.Email = ?;",(session.get("email"),)))
+    rates = requests.get("https://api.frankfurter.app/latest?from=SGD").json()['rates']
+    forex_amount = sum(rates[currency]*amount for currency,amount in data)
+    
+    
+    
+    data = sql_read(("SELECT Investment.InvestmentHeader,Investment.Quantity FROM Investment WHERE Investment.Email = ?;",(session.get("email"),)))
+    data_formatted = []
+    for name,Quantity in data:
+        price = requests.get("https://api.coingecko.com/api/v3/simple/price", params={'ids': name,'vs_currencies': 'sgd'}).json()
+        if price:
+            price = price[name]['sgd']
+            data_formatted.append((name,f"{price:.2f}",Quantity,f"{price*Quantity:.2f}"))
+        else:
+            data_formatted.append((name,"-",Quantity,"-"))
+            
+    crypto_amount = sum(float(row[-1]) for row in data_formatted if row[-1]!='-')
+    
+    return render_template("networth.html",history_data=history_data,range_list=range_list, maximum = maximum_value, amount = amount + forex_amount + crypto_amount)
 
 app.run(port = 5000)

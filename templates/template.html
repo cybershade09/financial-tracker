@@ -10,12 +10,12 @@
         <img src="../static/logo.svg" alt="FinanceLens Logo">
         <span>FinanceLens</span>
     </div>
-
+    
     <nav class="nav-links">
         <a class="category {%if request.endpoint =='home'%}category_highlighted{%endif%}" href="{{url_for('home')}}">Cash</a>
         <a class="category {%if request.endpoint =='investment'%}category_highlighted{%endif%}" href="{{url_for('investment')}}">Investment</a>
         <a class="category {%if request.endpoint =='forex'%}category_highlighted{%endif%}" href="{{url_for('forex')}}">Foreign Exchange</a>
-        <a class="category" href="">Net Worth</a>
+        <a class="category {%if request.endpoint =='networth'%}category_highlighted{%endif%}" href="{{url_for('networth')}}">Net Worth</a>
     </nav>
 
     <div class="logout_html">

@@ -1,0 +1,59 @@
+.graph{
+    width:100vw;
+    height:50vh;
+    display:grid;
+    grid-auto-flow: column;
+}
+
+.full_graph{
+    margin:0px 10vw 0px 10vw;
+    overflow-x: auto ;
+}
+.history_header,.label_heading{
+    width:70px;
+}
+
+.history_header{
+   height:100%;
+   display:flex;
+   flex-direction:column;
+   justify-content: flex-end;
+
+}
+.history{
+    background-color: var(--color);
+    width:10px;
+    height:var(--height);
+    margin:0px auto 0px auto;
+    border-radius: 5px;
+}
+
+.labels{
+    display:flex;
+}
+
+.label_header{
+    display:flex;
+    justify-content: center;
+}
+
+
+.history::before{
+    content:attr(data-price);
+    transform: translateY(-65px);
+    opacity:0;
+    background-color:#0cc1af;
+    color:#000;
+    display:block;
+    width:110px;
+    padding:0px auto 0px auto;
+    border-radius: 5%;
+}
+
+.history:hover::before{
+    opacity:1;
+}
+
+.networth,.title{
+    margin-left:30px
+}
