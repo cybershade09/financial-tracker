@@ -20,16 +20,18 @@
     <main class ="register_main">
         <div class = "form form_2">
             <form class="register" action="{{url_for('.process_register')}}" method="POST">
-                <h3 class="register_tag">REGISTER</h3>
-                {{flash_messages()}}
+                <div>
+                    <h3 class="register_tag">REGISTER</h3>
+                    {{flash_messages()}}
+                </div>
                 <p class="email_tags">Email</p>
-                <input type="email" name="email" class="email_inputs">
+                <input type="email" required name="email" class="email_inputs">
                 <p class="name_tag">Name</p>
-                <input type="text" name="name" class="name_inputs">
+                <input type="text" required name="name" class="name_inputs">
                 <p class="password_tags">Password</p>
-                <input type="password" name="password" class="password_inputs">
+                <input type="password" required name="password" class="password_inputs">
                 <p class="cfm_password_tag">Confirm Password</p>
-                <input type="password" name="cfm_password" class="cfm_password_inputs">
+                <input type="password" required name="cfm_password" class="cfm_password_inputs">
                 <p class="login_link">Already have an account? Login <a href="{{url_for('home')}}">here</a></p>
                 <input type="submit" value="Confirm" class="submit_register submit_login">
             </form>

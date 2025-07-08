@@ -139,3 +139,19 @@ body{
 }
 
 
+.form_flashed{
+    width:100%;
+    display:flex;
+    justify-content:center;
+}
+.form__flashed--danger{
+    color:red;
+}
+
+.form__flashed--success{
+    color:green;
+}
+
+.options{
+    display:flex;
+}

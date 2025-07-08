@@ -1,5 +1,5 @@
 {%extends "template.html"%}
-
+{%from "macro.html" import flash_messages,trashcan%}
 {%block head%}
     <link rel="stylesheet" href="../static/style3.css">
     <title>Transaction History</title>
@@ -15,6 +15,7 @@
             <p class="card">{{account.AccountName}}|{{account.NameOnCard}}</p>
         </div>
     </div>
+    {{flash_messages()}}
     <div class="transaction_custom">
         <p class="thtag">Transaction History</p>
         <div class="filter">
@@ -44,8 +45,11 @@
                                 <p><b>Expense Category: {{transaction.Category}}</b><br>Date: {{transaction.Date}}</p>
                                 <p>Transaction ID: {{transaction.TransactionID}}</p>
                             </div>
-                            <div class="showdetails">
+                            <div class="options">
                                 <a class='detailspage' href="{{url_for('transaction_details',transactionID = transaction.TransactionID)}}">Show details</a>
+                                <form action = "" method="POST">
+                                    <button class="delete_link" type = "submit" >{{trashcan('delete')}}</button>
+                                </form>
                             </div>
                         </div>
                         <div class="money_info">
@@ -59,8 +63,11 @@
                                 <p><b>Income</b><br>Date: {{transaction.Date}}</p>
                                 <p>Transaction ID: {{transaction.TransactionID}}</p>
                             </div>
-                            <div class="showdetails">
+                            <div class="options">
                                 <a class='detailspage' href="{{url_for('transaction_details',transactionID = transaction.TransactionID)}}">Show details</a>
+                                <form action = "" method="POST">
+                                    <button class="delete_link" type = "submit" >{{trashcan('delete')}}</button>
+                                </form>
                             </div>
                         </div>
                         <div class="money_info">

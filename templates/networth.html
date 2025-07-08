@@ -9,33 +9,36 @@
     <h1 class ="networth">Current Net Worth: ${{'%.2f'|format(amount)}}</h1>
     <p style="font-size:10px;margin-left:30px;margin-top:0px;">NOTE: Crypto Prices may not load or be accurate all the time</p>
     <h1 class = "title">Cash History</h1>
-    {% set ns = namespace(prev=history_data[range_list[0]]) %}
-    <div class="full_graph" id="scroll-container">
-        <div class = "graph">
-            {%for key in range_list%}
-                <div class = "history_header">
-                    <div data-price="Period:{{key}} Value:${{'%.2f'|format(history_data[key])}}" class="history {{key}}" style="--height:{{(history_data[key]*100)/maximum}}%;--color:{%if ns.prev == history_data[key]%}grey{%else%}{%if ns.prev > history_data[key]%}red{%else%}green{%endif%}{%endif%}">
+    {%if range_list%}
+        {% set ns = namespace(prev=history_data[range_list[0]]) %}
+        <div class="full_graph" id="scroll-container">
+            <div class = "graph">
+                {%for key in range_list%}
+                    <div class = "history_header">
+                        <div data-price="Period:{{key}} Value:${{'%.2f'|format(history_data[key])}}" class="history {{key}}" style="--height:{{(history_data[key]*100)/(1.20*maximum)}}%;--color:{%if ns.prev == history_data[key]%}grey{%else%}{%if ns.prev > history_data[key]%}red{%else%}green{%endif%}{%endif%}">
+                        </div>
                     </div>
-                </div>
-                {%set ns.prev = history_data[key]%}
-            {%endfor%}
-            <div class = "history_header"></div>
-        </div>
-        <div class = "labels">
-            {%for key in range_list%}
-                <div class="label_header">
-                    <div class="label_heading">
-                        {{key}}
+                    {%set ns.prev = history_data[key]%}
+                {%endfor%}
+                <div class = "history_header"></div>
+            </div>
+            <div class = "labels">
+                {%for key in range_list%}
+                    <div class="label_header">
+                        <div class="label_heading">
+                            {{key}}
+                        </div>
                     </div>
-                </div>
-            {%endfor%}
+                {%endfor%}
+            </div>
         </div>
-    </div>
-
-    <script>
-        window.addEventListener('DOMContentLoaded', function() {
-        const container = document.getElementById("scroll-container");
-        container.scrollLeft = container.scrollWidth;
-        });
-    </script>
+        <script>
+            window.addEventListener('DOMContentLoaded', function() {
+            const container = document.getElementById("scroll-container");
+            container.scrollLeft = container.scrollWidth;
+            });
+        </script>
+    {%else%}
+        <h1 style="margin-left:30px;">No Transaction data yet</h1>
+    {%endif%}
 {%endblock%}

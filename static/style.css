@@ -13,7 +13,7 @@ main{
 }
 
 .form_flashed{
-    width:100vw;
+    width:100%;
     display:flex;
     justify-content:center;
 }
@@ -277,4 +277,7 @@ body{
 
 .form__flashed--success{
     color:green;
+}
+.register{
+    width:100%;
 }

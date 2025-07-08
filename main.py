@@ -73,6 +73,9 @@ def process_register():
         flash("⚠ Account already exists",category = "danger")
         return redirect(url_for("register"))
     else:
+        if data["password"]!=data["cfm_password"]:
+            flash("⚠ Passwords don't match",category = "danger")
+            return redirect(url_for("register"))
         sql_write(("INSERT INTO User VALUES (?,?,?)",(data["email"],data["name"],pbkdf2_sha256.hash(data["password"]))))
         flash("Account Successfully created",category = "success")
         return redirect(url_for("home"))
@@ -174,13 +177,11 @@ def process_transaction():
         transaction = Transaction(TransactionID,AccountID,data["date"],float(data["amount"]),data["description"],data["category"],False)
         sql_write(("INSERT INTO Transactions(TransactionID,AccountID,Date,Amount,Description,Category) VALUES (?,?,?,?,?,?);",(transaction.TransactionID,transaction.AccountID,transaction.Date,transaction.Amount,transaction.Description,transaction.Category)))
         sql_write(("INSERT INTO TransactionType(TransactionID,IsExpense) VALUES (?,?);",(transaction.TransactionID,transaction.IsExpense)))
-        print("Income added")
         return redirect(url_for('history',AccountDetails = cipher.encrypt(json.dumps(account.to_dict()).encode()).decode()))
     else:
         if account.Amount -float(data["amount"])<0:
             flash("Insufficient funds",category = "danger")
             
-            print("Expense not added")
             return redirect(url_for('history',AccountDetails=AccountDetails))
         else:
             account.Amount -= float(data["amount"])
@@ -193,8 +194,7 @@ def process_transaction():
             transaction = Transaction(TransactionID,AccountID,data["date"],float(data["amount"]),data["description"],data["category"],True)
             sql_write(("INSERT INTO Transactions(TransactionID,AccountID,Date,Amount,Description,Category) VALUES (?,?,?,?,?,?);",(transaction.TransactionID,transaction.AccountID,transaction.Date,transaction.Amount,transaction.Description,transaction.Category)))
             sql_write(("INSERT INTO TransactionType(TransactionID,IsExpense) VALUES (?,?);",(transaction.TransactionID,transaction.IsExpense)))
-            print("Expense added")
-            
+            flash("Transaction logged",category="success")
             return redirect(url_for('history',AccountDetails = cipher.encrypt(json.dumps(account.to_dict()).encode()).decode()))
 
 @app.route("/transaction_details/<transactionID>")
@@ -223,7 +223,6 @@ def admin():
     if session.get("email") not in os.getenv('ADMIN_USERS').split(','):
         return abort(403)
     data = sql_read(("SELECT SpendingAccount.AccountName, SpendingAccount.RequestEmail FROM SpendingAccount WHERE SpendingAccount.Approval = 0;",))
-    print(data)
     return render_template("admin.html",data = data)
 
 
@@ -254,7 +253,8 @@ def investment():
     data_formatted = []
     for name,Quantity in data:
         price = requests.get("https://api.coingecko.com/api/v3/simple/price", params={'ids': name,'vs_currencies': 'sgd'}).json()
-        if price:
+
+        if price and price.get(name):
             price = price[name]['sgd']
             data_formatted.append((name,f"{price:.2f}",Quantity,f"{price*Quantity:.2f}"))
         else:
@@ -337,44 +337,54 @@ def update_forex(currency,option):
 def networth():
     # History processing
     sql = """
-SELECT Transactions.Date,Transactions.Amount, TransactionType.IsExpense FROM Transactions,TransactionType,AccountIDMap,Account 
-WHERE TransactionType.TransactionID = Transactions.TransactionID AND AccountIDMap.Email = Account.Email AND Transactions.AccountID = AccountIDMAP.AccountID AND AccountIDMap.Email = ?
+SELECT Transactions.Date, SUM(Transactions.Amount), TransactionType.IsExpense 
+FROM Transactions,TransactionType,AccountIDMap
+WHERE TransactionType.TransactionID = Transactions.TransactionID AND Transactions.AccountID = AccountIDMAP.AccountID AND AccountIDMap.Email = ?
+GROUP BY Transactions.Date,TransactionType.IsExpense
 ORDER BY Transactions.Date ASC;
     """
     history = sql_read((sql,(session.get("email"),)))
-    history_data = {}
-    for record in history:
-        history_data[record[0][:7]] = history_data.get("record[0][:7]",0)+(record[1]*[1,-1][record[2]])
-    first = list(history_data.items())[0][1]
+    if history:
+        history_data = {}
+        for record in history:
+            history_data[record[0][:7]] = history_data.get(record[0][:7],0)+(record[1]*[1,-1][record[2]])
+        first = list(history_data.items())[0][1]
+        print(history_data)
+        
+        amount = sql_read(("SELECT SUM(Account.Amount) FROM Account WHERE Account.Email = ?;",(session.get("email"),)),0)[0]
+        print(amount)
+        range_list = []
+        minimum = list(history_data.items())[0][0]
+        year,month = tuple(map(int,minimum.split("-")))
+        
+        while f"{year}-{month:02d}"<=f"{datetime.today().year}-{datetime.today().month:02d}":
+            range_list.append(f"{year}-{month:02d}")
+            year += (month+1)//13
+            month = (month%12)+1
+        
+        for key in range_list[::-1]:
+            value = history_data.get(key,0)
+            history_data[key] = amount
+            amount -= value
+        print(value,history_data,amount)
+        year,month = tuple(map(int,minimum.split("-")))
+        year -= 1 if month == 1 else 0
+        month = list(range(1,13))[month-2]
+        range_list = [f"{year}-{month:02d}"] + range_list
+        history_data[f"{year}-{month:02d}"] = amount
+        maximum_value = max(list(history_data.values()))
+        print(history_data)
+        amount = sql_read(("SELECT SUM(Account.Amount) FROM Account WHERE Account.Email = ?;",(session.get("email"),)),0)[0]
+    else:
+        amount = 0
+        history_data = {}
+        range_list = []
+        maximum_value = ""
     
-    
-    amount = sql_read(("SELECT SUM(Account.Amount) FROM Account WHERE Account.Email = ?;",(session.get("email"),)),0)[0] + sum(history_data.values())
-    range_list = []
-    minimum = list(history_data.items())[0][0]
-    year,month = tuple(map(int,minimum.split("-")))
-    
-    while f"{year}-{month:02d}"<=f"{datetime.today().year}-{datetime.today().month:02d}":
-        range_list.append(f"{year}-{month:02d}")
-        year += (month+1)//13
-        month = (month%12)+1
-    
-    for key in range_list:
-        value = history_data.get(key,0)
-        history_data[key] =history_data.get(key,0) +  amount
-        amount += value
-    
-    year,month = tuple(map(int,minimum.split("-")))
-    year -= 1 if month == 1 else 0
-    month = list(range(1,13))[month-2]
-    range_list = [f"{year}-{month:02d}"] + range_list
-    history_data[f"{year}-{month:02d}"] = history_data.get(minimum)-first
-    maximum_value = max(list(history_data.values()))
-    
-    amount = sql_read(("SELECT SUM(Account.Amount) FROM Account WHERE Account.Email = ?;",(session.get("email"),)),0)[0] + sum(history_data.values())
     data = sql_read(("SELECT Forex.ForeignCountry,Forex.Amount FROM Forex WHERE Forex.Email = ?;",(session.get("email"),)))
     rates = requests.get("https://api.frankfurter.app/latest?from=SGD").json()['rates']
-    forex_amount = sum(rates[currency]*amount for currency,amount in data)
-    
+    forex_amount = sum(rates[currency]*forex_amount for currency,forex_amount in data)
+
     
     
     data = sql_read(("SELECT Investment.InvestmentHeader,Investment.Quantity FROM Investment WHERE Investment.Email = ?;",(session.get("email"),)))
@@ -388,8 +398,8 @@ ORDER BY Transactions.Date ASC;
             data_formatted.append((name,"-",Quantity,"-"))
             
     crypto_amount = sum(float(row[-1]) for row in data_formatted if row[-1]!='-')
-    
-    return render_template("networth.html",history_data=history_data,range_list=range_list, maximum = maximum_value, amount = amount + forex_amount + crypto_amount)
+
+    return render_template("networth.html",history_data=history_data,range_list=range_list, maximum = maximum_value if maximum_value != 0 else 1, amount = amount + forex_amount + crypto_amount)
 
 @app.errorhandler(404)
 def page_not_found(e):

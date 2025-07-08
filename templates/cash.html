@@ -11,6 +11,9 @@
         <h2>{{"%.2f"|format(total_balance)}}</h3>
     </div>
     {{flash_messages()}}
+    {%if not accounts%}
+        <h4 style="margin-left:50px">No accounts yet</h4>
+    {%endif%}
     <div class="cards">
         {%if accounts%}
             {%for account in accounts%}
@@ -18,13 +21,7 @@
                     {{cash_option(account[0].NameOnCard,account[0].Amount,account[0].AccountName)}}
                 </a>
             {%endfor%}
-            <a class = " card AddACard-Link" href="{{url_for('add_account')}}"><div style="width: 300px;height:150px;padding: 20px;border-radius: 15px;background-color: #e5e175;margin: 10px auto;display:flex;justify-content:center;align-items:center;">+ Add a Card</div></a>
-
-        {%else%}
-            <h4>No accounts yet</h4>
-            <a class = " card AddACard-Link" href="{{url_for('add_account')}}"><div style="width: 300px;height:150px;padding: 20px;border-radius: 15px;background-color: #e5e175;margin: 10px auto;display:flex;justify-content:center;align-items:center;">+ Add a Card</div></a>
-
         {%endif%}
+        <a class = " card AddACard-Link" href="{{url_for('add_account')}}"><div style="width: 300px;height:150px;padding: 20px;border-radius: 15px;background-color: #e5e175;margin: 10px auto;display:flex;justify-content:center;align-items:center;">+ Add a Card</div></a>
     </div>
-
 {%endblock%}
