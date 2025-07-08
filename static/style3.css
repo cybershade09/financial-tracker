@@ -154,4 +154,15 @@ body{
 
 .options{
     display:flex;
+
+}
+
+.delete_link{
+    background:None;
+    border:None;
+    margin-left:5px;
+}
+
+.delete_link:hover{
+    color:red;
 }

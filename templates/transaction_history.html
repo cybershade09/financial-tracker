@@ -47,7 +47,7 @@
                             </div>
                             <div class="options">
                                 <a class='detailspage' href="{{url_for('transaction_details',transactionID = transaction.TransactionID)}}">Show details</a>
-                                <form action = "" method="POST">
+                                <form action = "{{url_for('delete_transaction',transactionID = transaction.TransactionID)}}" method="POST">
                                     <button class="delete_link" type = "submit" >{{trashcan('delete')}}</button>
                                 </form>
                             </div>
@@ -65,7 +65,7 @@
                             </div>
                             <div class="options">
                                 <a class='detailspage' href="{{url_for('transaction_details',transactionID = transaction.TransactionID)}}">Show details</a>
-                                <form action = "" method="POST">
+                                <form action = "{{url_for('delete_transaction',transactionID = transaction.TransactionID)}}" method="POST">
                                     <button class="delete_link" type = "submit" >{{trashcan('delete')}}</button>
                                 </form>
                             </div>

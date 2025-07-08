@@ -6,7 +6,7 @@ CREATE TABLE User(
 
 CREATE TABLE SpendingAccount(
     AccountName TEXT PRIMARY KEY,
-    Approval BOOLEAN NOT NULL,
+    Approval INTEGER NOT NULL,
     RequestEmail TEXT NOT NULL,
     FOREIGN KEY (RequestEmail) REFERENCES User(Email)
 );
@@ -57,7 +57,7 @@ CREATE TABLE Transactions(
 
 CREATE TABLE TransactionType(
     TransactionID TEXT NOT NULL,
-    IsExpense BOOLEAN,
+    IsExpense INTEGER,
     FOREIGN KEY(TransactionID) REFERENCES Transactions(TransactionID)
     PRIMARY KEY(TransactionID)
 );

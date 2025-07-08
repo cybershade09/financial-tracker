@@ -210,6 +210,56 @@ def transaction_details(transactionID):
     
     return render_template("view_details.html",transaction = transaction)
 
+@app.route("/delete_transaction/<transactionID>",methods=["POST"])
+@login_required
+def delete_transaction(transactionID):
+    transaction = sql_read(("SELECT Transactions.*,TransactionType.IsExpense FROM Transactions,TransactionType WHERE TransactionType.TransactionID = Transactions.TransactionID AND Transactions.TransactionID = ?;",(transactionID,)),0)
+    if not transaction:
+        return redirect(url_for('home'))
+    
+    transaction = Transaction(*transaction)
+    if sql_read(("SELECT AccountIDMap.Email FROM AccountIDMap WHERE AccountIDMAP.AccountID = ?;",(transaction.AccountID,)),0)[0] != session.get("email"):
+        return abort(403)
+    
+    if not transaction.IsExpense:
+        sql = """SELECT Transactions.Date, Transactions.Amount, TransactionType.IsExpense 
+    FROM Transactions,TransactionType
+    WHERE TransactionType.TransactionID = Transactions.TransactionID AND Transactions.AccountID = ?
+    ORDER BY Transactions.Date ASC;"""
+        data = sql_read((sql,(transaction.AccountID,)))
+        history_data = {}
+        range_list = []
+        for record in data:
+            if record[0] not in range_list:
+                range_list.append(record[0])
+            history_data[record[0]] = history_data.get(record[0],0)+(record[1]*[1,-1][record[2]])
+        amount = sql_read(("SELECT Account.Amount FROM AccountIDMap,Account WHERE AccountIDMap.AccountName = Account.AccountName AND AccountIDMAP.Email = Account.Email AND AccountIDMap.NameOnCard = Account.NameOnCard AND AccountIDMap.AccountID = ?;",(transaction.AccountID,)),0)[0]
+        for key in range_list[::-1]:
+                value = history_data.get(key,0)
+                history_data[key] = amount
+                amount -= value
+
+        for key,value in history_data.items():
+            if  key>=transaction.Date:
+                history_data[key] = value - transaction.Amount
+
+        if any(value<0 for value in list(history_data.values())):
+            flash('Invalid option',category="danger")
+            return redirect(request.referrer)
+    sql_write(("DELETE FROM Transactions WHERE Transactions.AccountID = ?;",(transaction.TransactionID,)))
+    sql_write((" DELETE FROM TransactionType WHERE TransactionType.TransactionID = ?;",(transaction.TransactionID,)))
+    amount = sql_read(("SELECT Account.Amount FROM AccountIDMap,Account WHERE AccountIDMap.AccountName = Account.AccountName AND AccountIDMAP.Email = Account.Email AND AccountIDMap.NameOnCard = Account.NameOnCard AND AccountIDMap.AccountID = ?;",(transaction.AccountID,)),0)[0]
+    info = sql_read(("SELECT AccountIDMap.Email,AccountIDMap.AccountName,AccountIDMap.NameOnCard FROM AccountIDMAP WHERE AccountIDMAP.AccountID = ?;",(transaction.AccountID,)),0)
+    sql_write(("UPDATE Account SET Amount = ? WHERE Account.Email = ? AND Account.AccountName = ? AND Account.NameOnCard = ?;",(amount- (transaction.Amount * (-1 if transaction.IsExpense else 1)),*info)))
+
+    path = request.referrer.split('/')
+    AccountDetails = path[-1]
+    cipher = Fernet(os.getenv("FERENET_KEY").encode())
+    account = Account.from_dict(json.loads(cipher.decrypt(AccountDetails.encode()).decode()))
+    account.Amount = amount - (transaction.Amount * (-1 if transaction.IsExpense else 1))
+    path[-1] = cipher.encrypt(json.dumps(account.to_dict()).encode()).decode()
+    flash('Deleted Successfully',category="success")
+    return redirect("/".join(path))
 @app.route('/logout')
 @login_required
 def logout():
@@ -349,10 +399,10 @@ ORDER BY Transactions.Date ASC;
         for record in history:
             history_data[record[0][:7]] = history_data.get(record[0][:7],0)+(record[1]*[1,-1][record[2]])
         first = list(history_data.items())[0][1]
-        print(history_data)
+
         
         amount = sql_read(("SELECT SUM(Account.Amount) FROM Account WHERE Account.Email = ?;",(session.get("email"),)),0)[0]
-        print(amount)
+
         range_list = []
         minimum = list(history_data.items())[0][0]
         year,month = tuple(map(int,minimum.split("-")))
@@ -366,14 +416,14 @@ ORDER BY Transactions.Date ASC;
             value = history_data.get(key,0)
             history_data[key] = amount
             amount -= value
-        print(value,history_data,amount)
+
         year,month = tuple(map(int,minimum.split("-")))
         year -= 1 if month == 1 else 0
         month = list(range(1,13))[month-2]
         range_list = [f"{year}-{month:02d}"] + range_list
         history_data[f"{year}-{month:02d}"] = amount
         maximum_value = max(list(history_data.values()))
-        print(history_data)
+
         amount = sql_read(("SELECT SUM(Account.Amount) FROM Account WHERE Account.Email = ?;",(session.get("email"),)),0)[0]
     else:
         amount = 0
